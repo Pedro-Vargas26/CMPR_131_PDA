@@ -1,18 +1,18 @@
-#pragma once
+
 
 #ifndef DYNAMICARRAY_H
 #define DYNAMICARRAY_H
+#pragma once 
 
 #include <exception>
 using std::exception;
 
-template<typename T>
+template <typename T>
 class DynamicArray
 {
 private:
 	int p_size;
 	T* p_ptr;
-
 
 	void mergeSort(T genericArr[], const int& beginningIndex, const int& endingIndex);
 	void merge(T[], const int&, const int&, const int&);
@@ -46,5 +46,4 @@ public:
 
 	friend class Statistical;
 };
-
 #endif

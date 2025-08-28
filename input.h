@@ -1,59 +1,44 @@
-#pragma once
+#ifndef INPUT_H
+#define INPUT_H
+
 #include <iostream>
 #include <algorithm>
 #include <string>
+#include <regex>
 
 using namespace std;
 
-string& ltrim(string& s)
-{
-	s.erase(s.begin(), find_if_not(s.begin(), s.end(), [](int c) {return isspace(c); }));
-	return s;
-}
-
-string& rtrim(string& s)
-{
-	s.erase(find_if_not(s.rbegin(), s.rend(), [](int c) {return isspace(c); }).base(), s.end());
-	return s;
-}
-
-string trim(const string& s)
-{
-	string t = s;
-	return ltrim(rtrim(t));
-}
-
-//return an input string
-string inputString(string prompt, bool haveSpaces, int length)
+string inputStringDate(string prompt)
 {
 	string input;
-	while (true)
+
+	do
 	{
 		cout << prompt;
-		if (haveSpaces)
-			getline(cin, input);
-		else
-		{
-			cin >> input;
-			cin.clear();
-			cin.ignore(999, '\n');
-		}
+		cin >> input;
+		cin.clear();
+		cin.ignore(999, '\n');
 
-		if (input.length() > length)
-			cout << "ERROR-2: Invalid input. Length must not be exceeded " << length << " characters.\n";
+		regex slashed_ddmmyy("^(((0)[0-9])|((1)[0-2]))\/([0-2][0-9]|(3)[0-1])\/\\d{2}$");
+
+		regex_match(input, slashed_ddmmyy); // false, no slashes
+		if (!regex_match(input, slashed_ddmmyy) && input.length() != 10)
+		{
+			cout << "ERROR: Invalid date input. Must be a mm/dd/yy.\n";
+			continue;
+		}
 		else
 			break;
-	}
-	input.resize(length);
-	return trim(input);
+	} while (true);
+	return input;
 }
-
-//return an input string
-string inputString(string prompt, bool haveSpaces)
+//return
+string inputString(string prompt, bool withSpaces)
 {
 	string input;
+
 	cout << prompt;
-	if (haveSpaces)
+	if (withSpaces)
 		getline(cin, input);
 	else
 	{
@@ -61,46 +46,6 @@ string inputString(string prompt, bool haveSpaces)
 		cin.clear();
 		cin.ignore(999, '\n');
 	}
-
-	return trim(input);
-}
-
-//return an input char
-char inputChar(string prompt, string listChars)
-{
-	char input;
-	while (true)
-	{
-		cout << prompt;
-		if (!(cin >> input))
-			cout << "ERROR-1: Invalid input. Must be a character type.\n";
-		else
-		{
-			bool bfound = false;
-			for (unsigned c = 0; c < listChars.length(); c++)
-				if (toupper(listChars[c]) == toupper(input))
-				{
-					bfound = true;
-					break;
-				}
-			if (!bfound)
-			{
-				cout << "ERROR-2: Invalid input. Must be a character from the list of '";
-				for (unsigned c = 0; c < listChars.length() - 1; c++)
-					cout << "'" << static_cast<char>(toupper(listChars[c])) << "', ";
-				cout << "or '" << static_cast<char>(toupper(listChars.back())) << "'.\n";
-			}
-			else
-				break;
-		}
-		cin.clear();
-		cin.ignore(999, '\n');
-
-	};
-
-	cin.clear();
-	cin.ignore(999, '\n');
-
 	return input;
 }
 
@@ -124,6 +69,44 @@ char inputChar(string prompt, char yes, char no)
 	} while (true);
 	cin.clear();
 	cin.ignore(999, '\n');
+	return input;
+}
+
+char inputChar(string prompt, string lookup)
+{
+	char input;
+	do
+	{
+		cout << prompt;
+		if (!(cin >> input))
+		{
+			cout << "ERROR-1A: Invalid input. Must be a character type.\n";
+			cin.clear();
+			cin.ignore(999, '\n');
+		}
+		else
+		{
+			for ( unsigned int i = 0; i < lookup.length(); i++)
+				if (toupper(input) == toupper(lookup[i]))
+				{
+					cin.clear();
+					cin.ignore(999, '\n');
+					return input;
+				}
+			cout << "ERROR-1A: Invalid input. Must be ";
+			for (unsigned int i = 0; i < lookup.length(); i++)
+				if ( i != lookup.length()-1)
+					cout << "'" << lookup[i] << "',";
+				else
+					cout << " or '" << lookup[i] << "'\n";
+
+			cin.clear();
+			cin.ignore(999, '\n');
+			continue;
+		}
+		break;
+	} while (true);
+
 	return input;
 }
 
@@ -189,8 +172,6 @@ int inputInteger(string prompt)
 		else
 			break;
 	} while (true);
-	cin.clear();
-	cin.ignore(999, '\n');
 	return input;
 }
 
@@ -207,10 +188,35 @@ int inputInteger(string prompt, bool posNeg)
 			cin.clear();
 			cin.ignore(999, '\n');
 		}
-		else if (posNeg && input < 0)
+		else if (posNeg && input <= 0)
 			cout << "ERROR-2A: Invalid input. Must be a positive number.\n";
 		else if (!posNeg && input >= 0)
 			cout << "ERROR-2A: Invalid input. Must be a negative number.\n";
+		else
+			break;
+	} while (true);
+	cin.clear();
+	cin.ignore(999, '\n');
+	return input;
+}
+
+//return an integer where posNeg is positive (true) or negative (false)
+int inputInteger(string prompt, int start, bool greater)
+{
+	int input;
+	do
+	{
+		cout << prompt;
+		if (!(cin >> input))
+		{
+			cout << "ERROR-2A: Invalid input. Must be an integer type.\n";
+			cin.clear();
+			cin.ignore(999, '\n');
+		}
+		else if (greater && input < start)
+			cout << "ERROR-2A: Invalid input. Must be a greater than or equal to " << start << ".\n";
+		else if (!greater && input > 0)
+			cout << "ERROR-2A: Invalid input. Must be a lesser than or equal to " << start << ".\n";
 		else
 			break;
 	} while (true);
@@ -259,6 +265,8 @@ double inputDouble(string prompt)
 		else
 			break;
 	} while (true);
+	cin.clear();
+	cin.ignore(999, '\n');
 	return input;
 }
 
@@ -275,13 +283,39 @@ double inputDouble(string prompt, bool posNeg)
 			cin.clear();
 			cin.ignore(999, '\n');
 		}
-		else if (posNeg && input < 0.0)
+		else if (posNeg && input <= 0.0)
 			cout << "ERROR-2B: Invalid input. Must be a positive number.\n";
 		else if (!posNeg && input >= 0.0)
 			cout << "ERROR-2B: Invalid input. Must be a negative number.\n";
 		else
 			break;
 	} while (true);
+	cin.clear();
+	cin.ignore(999, '\n');
+	return input;
+}
+
+double inputDouble(string prompt, double start, bool posNeg)
+{
+	double input;
+	do
+	{
+		cout << prompt;
+		if (!(cin >> input))
+		{
+			cout << "ERROR-2B: Invalid input. Must be a double type.\n";
+			cin.clear();
+			cin.ignore(999, '\n');
+		}
+		else if (posNeg && input <= start)
+			cout << "ERROR-2B: Invalid input. Must be greater than or equal to " << start << ".\n";
+		else if (!posNeg && input >= start)
+			cout << "ERROR-2B: Invalid input. Must be lesser than or equal to " << start << ".\n";
+		else
+			break;
+	} while (true);
+	cin.clear();
+	cin.ignore(999, '\n');
 	return input;
 }
 
@@ -303,7 +337,9 @@ double inputDouble(string prompt, double startRange, double endRange)
 		else
 			break;
 	} while (true);
+	cin.clear();
+	cin.ignore(999, '\n');
 	return input;
 }
 
-
+#endif // !INPUT_H
