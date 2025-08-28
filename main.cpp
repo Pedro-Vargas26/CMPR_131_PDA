@@ -8,12 +8,12 @@
 
 using namespace std;
 
-DynamicArray<double> dataset;   // Fixed
+DynamicArray<double> dataset;   // FIXED
 
 char menuOption();
 int TaskJ();
 int Task1();
-char Task2();  // Fixed return type
+char Task2();  // FIXED return type
 int TaskK();
 //int TaskL();
 
@@ -48,8 +48,20 @@ int main()
 
 char menuOption()
 {
+    system("cls");
     cout << "\n\tAddress of Dynamic array:"; //#
     cout << "\n\tDataset:"; //sample
+    if (dataset.size() == 0)
+    {
+        cout << "(sample)";
+    }
+    else
+    {
+        for (int i = 0; i < dataset.size(); i++)
+        {
+            cout << dataset.retrieve(i) << " ";
+        }
+    }
     cout << "\n\n\tERROR: Data set requires at least 2 values.";
     cout << "\n\tDescriptive Statistics Calculator Main Menu";
     cout << "\n\t================================================================================";
@@ -63,7 +75,7 @@ char menuOption()
     cout << "\n\tL. Find Quartiles";
     cout << "\n\t================================================================================";
 
-    return inputChar("\n\tOption: ");
+    return toupper(inputChar("\n\tOption: "));
 }
 
 int Task1()
@@ -102,6 +114,7 @@ int Task1()
 
 char Task2()
 {
+    system("cls");
     cout << "\n\t Insert (sort) Dataset Menu";
     cout << "\n\t================================================================================";
     cout << "\n\tA. insert a value";
@@ -110,7 +123,39 @@ char Task2()
     cout << "\n\t================================================================================";
     cout << "\n\tR. return";
     cout << "\n\t================================================================================";
-    return inputChar("\n\tOption: ", "ABCR");
+    char option = toupper(inputChar("\n\tOption: ", "ABCR"));
+
+    switch (option)
+    {
+
+    case 'A':
+    {
+        double value;
+        value = inputDouble("\n\tSpecify an integer value to be inserted to the Dataset: ");
+        dataset.append(value);
+        break;
+    }
+
+    case 'B':
+    {
+        int count = inputDouble("\n\tSpecify a number of values to be randomly generated into the Dataset:",1,1000);
+        srand(static_cast<unsigned>(time(nullptr)));
+        for (int i = 0; i < count; i++)
+        {
+            double value = rand() % 100 + 1;
+            dataset.append(value);
+        }
+
+        break;
+    }
+
+
+    case 'R':
+    {
+        return 1;
+    }
+    }
+    //return 0;
 }
 
 int TaskJ()
