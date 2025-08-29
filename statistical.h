@@ -19,7 +19,7 @@ public:
 
     static double midrangeIn(const DynamicArray<double>& dataset);
 
-    static double quartilesIn(const DynamicArray<double>& dataset);
+    static  double quartilesIn(const DynamicArray<double>& dataset);
 
     static double  outliers(const DynamicArray<double>& dataset);
 
