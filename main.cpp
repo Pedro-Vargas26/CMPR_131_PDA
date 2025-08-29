@@ -16,6 +16,14 @@ int OptionTwo();
 int OptionThree();
 
 double TaskI();
+double TaskJ();
+double TaskK();
+double TaskL();
+double TaskM();
+double TaskN();
+double TaskO();
+double TaskP();
+double TaskQ();
 
 int main()
 {
@@ -32,9 +40,9 @@ int main()
 	{
 		switch (menuOption())
 		{
-		case 0: exit(0); break;
-			//case 1: Task1(); break;
-		//case 2: Task2(); break;
+		case '0': exit(0); break;
+		case '1': OptionOne(); break;
+		case '2': OptionTwo(); break;
 			//case 3: Task3(); break;
 
 			 //case 'A': TaskA(); break;
@@ -46,14 +54,14 @@ int main()
 			// case 'G': TaskG(); break;
 			// case 'H': TaskH(); break;
 	  case 'I': TaskI(); break;
-		//case 'J': TaskJ(); break;
-	//	case 'K': TaskK(); break;
-	//	case 'L': TaskL(); break;
-			// case 'M': TaskM(); break;
-			// case 'N': TaskN(); break;
-			// case 'O': TaskO(); break;
-			// case 'P': TaskP(); break;
-			// case 'Q': TaskQ(); break;
+	  case 'J': TaskJ(); break;
+	  case 'K': TaskK(); break;
+	  case 'L': TaskL(); break;
+	  case 'M': TaskM(); break;
+	  case 'N': TaskN(); break;
+	  case 'O': TaskO(); break;
+	  case 'P': TaskP(); break;
+	  case 'Q': TaskQ(); break;
 			// case 'R': TaskR(); break;
 			// case 'S': TaskS(); break;
 			// case 'T': TaskT(); break;
@@ -75,9 +83,20 @@ int main()
 
 char menuOption()
 {
-	
+	system("cls");
 	cout << "\n\tAddress of Dynamic array:"; //#
-	cout << "\n\tDataset:"; //sample 
+	cout << "\n\tDataset: "; //sample 
+	if (dataset.size() == 0) 
+	{
+		cout << "(sample)";
+	}
+	else
+	{
+		for (int i = 0; i < dataset.size(); i++)
+		{
+			cout << dataset.retrieve(i) << " ";
+		}
+	}
 	cout << "\n\n\tERROR: Data set requires at least 2 values.";
 	cout << "\n\tDescriptive Statistics Calculator Main Menu";
 	cout << "\n\t================================================================================";
@@ -101,32 +120,9 @@ char menuOption()
 	cout << "\n\tM. Find Interquartile Range                    Z. Output ALL statical results to text file";
 	cout << "\n\t================================================================================";
 
-	char option;
-	  option = inputChar("\n\tOption: ");
-	 if (option < 'A' && option > 'Z')
-	 {
-		 return option;
-	 }
-		switch (option)
-		{
-		case '0':exit(1); 
-			break;
-		case '1':OptionOne(); 
-			break;
-		case '2':OptionTwo(); 
-			break;
-		case '3':OptionThree(); 
-			break;
-
-		default:cout << "\t\tERROR - Invalid option. Please re-enter."; break;
-		}
-
+	return toupper(inputChar("\n\tOption: "));
+	
 }
-
-//TO DO Validate data set prior to allowing A-Z 
-
-
-//To DO allow char to pass numbers and letters 
 
 int OptionOne()
 
@@ -161,9 +157,9 @@ int OptionTwo()
 	cout << "\n\t ============================================================";
 	cout << "\n\tR. Return";
 	cout << "\n\t ============================================================";
-	char option2;
 
-	 option2 = inputChar("\n\tOption: ", "ABCR");
+
+	char option2 = inputChar("\n\tOption: ", "ABCR");
 
 	switch (option2)
 
@@ -178,7 +174,7 @@ int OptionTwo()
 	}
 
 	case 'r':
-		return 0; // Return to main menu
+		return 1; // Return to main menu
 
 	case 'b': 
 		break;
@@ -214,6 +210,72 @@ double TaskI()
 
 	Statistical stats(dataset);
 	double stddev = Statistical::standarddeviation(dataset); 
-	std::cout << "Sample standard deviation: ";
+	std::cout << "Sample standard deviation =  "<< stddev ;
 	return stddev;
 }
+
+double TaskJ()
+{
+	Statistical sats(dataset);
+	double vrnce = Statistical::varianceIn(dataset);
+	std::cout << "Variance =  " << vrnce;
+	return vrnce;
+
+}
+double TaskK()
+{
+	Statistical sats(dataset);
+	double mdrnge = Statistical::midrangeIn(dataset);
+	std::cout << "Midrange =  " << mdrnge;
+	return mdrnge;
+
+}
+
+double TaskL()
+{
+	Statistical stats(dataset);
+	double iqr = stats.quartilesIn(dataset);
+	return iqr;
+}
+
+double TaskM()
+{
+	//needs to only reurn IQR
+	Statistical stats(dataset);
+	double iqr = stats.quartilesIn(dataset);
+	return iqr;
+}
+
+double TaskN()
+{
+		Statistical stats(dataset);
+		double out = stats.outliers(dataset);
+		std::cout << "Outliers =  " << out;
+		return out;
+}
+
+double TaskO()
+{
+	Statistical stats(dataset);
+	double sumsquares = stats.thesumofsquares(dataset); 
+	std::cout << "Sum of Squares = " <<sumsquares;
+	return sumsquares;
+}
+
+double TaskP()
+{
+	Statistical stats(dataset);
+	double mnabsdeviation = stats.meanabsolutedeviation(dataset);
+	std::cout << "Mean Absoulte Deviation = " << mnabsdeviation;
+	return mnabsdeviation;
+}
+
+double TaskQ()
+{
+	Statistical stats(dataset);
+	double rtmeansquare = stats.rootmeansquare(dataset);
+	std::cout << "Root Mean Square = " << rtmeansquare;
+	return rtmeansquare;
+}
+
+
