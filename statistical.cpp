@@ -1,8 +1,8 @@
 #include "statistical.h"
 #include "DynamicArray.h"
-#include <cmath>   // for sqrt
+#include <cmath>   
 #include <algorithm>
-#include <iostream> // for error output
+#include <iostream> 
 
 
 
@@ -87,31 +87,53 @@ double Statistical::midrangeIn(const DynamicArray<double>& dataset)
 double Statistical::quartilesIn(const DynamicArray<double>& dataset)
 {
     int size = dataset.size();
-    if (size < 4)
+    double q1, q2, q3, iqr;
+
+    if (size == 0) {
+        std::cout << "\n\tERROR: Not enough values in dataset.\n";
         return 0.0;
-
-
+    }
 
     double* sortedArr = new double[size];
     for (int i = 0; i < size; ++i)
         sortedArr[i] = dataset.retrieve(i);
 
-    double q1 = median(sortedArr, 0, (size - 1) / 2);
-    double q3 = median(sortedArr, (size + 1) / 2, size - 1);
+   
+
+    if (size == 1) {
+        std::cout << "\n\tERROR: At least 2 values required to compute quartiles.\n";
+    
+    }
+    else if (size == 2) {
+        q2 = median(sortedArr, 0, 1);
+        std::cout << "\n\tQ1 = empty";
+        std::cout << "\n\tQ2 = " << q2;
+        std::cout << "\n\tQ3 = empty";
+    
+    }
+    else {
+        q1 = median(sortedArr, 0, (size - 1) / 2);
+        q2 = median(sortedArr, 0, size - 1);
+        q3 = median(sortedArr, (size + 1) / 2, size - 1);
+        iqr = q3 - q1;
+
+        std::cout << "\n\tQ1 = " << q1;
+        std::cout << "\n\tQ2 = " << q2;
+        std::cout << "\n\tQ3 = " << q3;
+        std::cout << "\n\t Interquartile = " << iqr;
+
+    }
 
     delete[] sortedArr;
-
-    return q3 - q1;
+    return iqr;
 }
+
 
 double Statistical::outliers(const DynamicArray<double>& dataset)
 {
     int size = dataset.size();
     if (size < 4)
         return 0;
-
-  
-   
 
     double* sortedArr = new double[size];
     for (int i = 0; i < size; ++i)
@@ -125,13 +147,20 @@ double Statistical::outliers(const DynamicArray<double>& dataset)
     double upperBound = q3 + 1.5 * iqr;
 
     int count = 0;
+    bool foundOutlier = false;
     for (int i = 0; i < size; ++i)
     {
         double val = dataset.retrieve(i);
         if (val < lowerBound || val > upperBound)
-            ++count;
+        {
+            std::cout << val << " ";
+            foundOutlier = true;
+        }
     }
+    if (!foundOutlier)
+        std::cout << "No outliers detected.";
 
+    std::cout << std::endl;
     delete[] sortedArr;
     return count;
 }
