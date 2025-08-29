@@ -1,171 +1,205 @@
 #include "statistical.h"
 #include "DynamicArray.h"
-
-#include <iostream>
+#include <cmath>   // for sqrt
 #include <algorithm>
+#include <iostream> // for error output
+
+
 
 using namespace std;
 
-//TO DO validate array has input 
+Statistical::Statistical(const DynamicArray<double>& data) : dataset(data) {}
 
-
-
-
-double statistical::varianceIn(const double data[], int size)
+double Statistical::mean(const DynamicArray<double>& dataset)
 {
-	if (size < 2 )
-		return 0.0;
+    int size = dataset.size();
+    if (size == 0) return 0.0;
 
-	double sum = 0.0;
+    double sum = 0.0;
+    for (int i = 0; i < size; ++i)
+        sum += dataset.retrieve(i);
 
-	for (int i = 0; i < size; ++i)
-	{
-		sum += data[i];
-	}
+    return sum / size;
+}
 
-	double mean = sum / size;
+double Statistical::standarddeviation(const DynamicArray<double>& dataset)
+{
+    //standarddeviation : mean --
+    int n = dataset.size();
 
-	double variance = 0.0;
-	for (int i = 0; i < size; ++i)
-	{
-		variance += (data[i] - mean)* (data[i]-mean);
+    if (n <= 1) {
+        std::cout << "\n\tERROR: data set requires at least 2 values.\n";
+        return 0.0;
+    }
+    
+    double m = Statistical::mean(dataset);
 
-	}
-	return variance / (size-1);
+
+
+    double totalSquaredDiff = 0.0;
+    for (int i = 0; i < n; ++i) {
+        double diff = dataset.retrieve(i) - m;
+        totalSquaredDiff += diff * diff;
+    }
+
+    return std::sqrt(totalSquaredDiff / (n - 1));  // Sample std dev denominator is n-1
+}
+
+double Statistical::varianceIn(const DynamicArray<double>& dataset)
+{
+    int size = dataset.size();
+    if (size < 2)
+        return 0.0;
+
+    double sum = 0.0;
+    for (int i = 0; i < size; ++i)
+        sum += dataset.retrieve(i);
+
+    double mean = sum / size;
+
+    double variance = 0.0;
+    for (int i = 0; i < size; ++i)
+    {
+        double diff = dataset.retrieve(i) - mean;
+        variance += diff * diff;
+    }
+    return variance / (size - 1);
+}
+
+double Statistical::midrangeIn(const DynamicArray<double>& dataset)
+{
+    int size = dataset.size();
+    if (size == 0)
+        return 0.0;
+
+    double minVal = dataset.retrieve(0);
+    double maxVal = dataset.retrieve(0);
+
+    for (int i = 1; i < size; ++i)
+    {
+        double val = dataset.retrieve(i);
+        if (val < minVal) minVal = val;
+        if (val > maxVal) maxVal = val;
+    }
+    return (minVal + maxVal) / 2.0;
+}
+
+double Statistical::quartilesIn(const DynamicArray<double>& dataset)
+{
+    int size = dataset.size();
+    if (size < 4)
+        return 0.0;
+
+
+
+    double* sortedArr = new double[size];
+    for (int i = 0; i < size; ++i)
+        sortedArr[i] = dataset.retrieve(i);
+
+    double q1 = median(sortedArr, 0, (size - 1) / 2);
+    double q3 = median(sortedArr, (size + 1) / 2, size - 1);
+
+    delete[] sortedArr;
+
+    return q3 - q1;
+}
+
+double Statistical::outliers(const DynamicArray<double>& dataset)
+{
+    int size = dataset.size();
+    if (size < 4)
+        return 0;
+
+  
+   
+
+    double* sortedArr = new double[size];
+    for (int i = 0; i < size; ++i)
+        sortedArr[i] = dataset.retrieve(i);
+
+    double q1 = median(sortedArr, 0, (size - 1) / 2);
+    double q3 = median(sortedArr, (size + 1) / 2, size - 1);
+    double iqr = q3 - q1;
+
+    double lowerBound = q1 - 1.5 * iqr;
+    double upperBound = q3 + 1.5 * iqr;
+
+    int count = 0;
+    for (int i = 0; i < size; ++i)
+    {
+        double val = dataset.retrieve(i);
+        if (val < lowerBound || val > upperBound)
+            ++count;
+    }
+
+    delete[] sortedArr;
+    return count;
+}
+
+double Statistical::thesumofsquares(const DynamicArray<double>& dataset)
+{
+    int size = dataset.size();
+    if (size == 0)
+        return 0.0;
+
+    double mean = 0.0;
+    for (int i = 0; i < size; ++i)
+        mean += dataset.retrieve(i);
+
+    mean /= size;
+
+    double sumSquares = 0.0;
+    for (int i = 0; i < size; ++i)
+    {
+        double diff = dataset.retrieve(i) - mean;
+        sumSquares += diff * diff;
+    }
+
+    return sumSquares;
+}
+
+double Statistical::median(double arr[], int start, int end)
+{
+    int length = end - start + 1;
+    int mid = start + length / 2;
+
+    if (length % 2 == 0)
+        return (arr[mid - 1] + arr[mid]) / 2.0;
+    else
+        return arr[mid];
+}
+
+double Statistical::meanabsolutedeviation(const DynamicArray<double>& dataset) {
+    int size = dataset.size();
+    if (size == 0) return 0.0;
+   
+    //using mean function
+
+    double m = Statistical::mean(dataset);
+  
+
+    double sumAbsoluteDiff = 0.0;
+
+    for (int i = 0; i < size; ++i) {
+        sumAbsoluteDiff += std::fabs(dataset.retrieve(i) - m);
+    }
+
+    return sumAbsoluteDiff / size;
 }
 
 
-double statistical::midrangeIn(const double data[], int size)
-{
-	if (size == 0)
 
-		return 0.0;
+double Statistical::rootmeansquare(const DynamicArray<double>& dataset) {
+    int n = dataset.size();
+    if (n == 0) {
+        return 0.0; 
+    }
 
-	double min = data[0];
-	double max = data[0];
+    double sumSquares = 0.0;
+    for (int i = 0; i < n; ++i) {
+        double val = dataset.retrieve(i);
+        sumSquares += val * val;
+    }
 
-	for (int i = 1; i < size; ++i)
-	{
-		if (data[i] < min) min = data[i];
-		if (data[i] > max) max = data[i];
-	}
-	return(min + max) / 2.0;
-
+    return std::sqrt(sumSquares / n); 
 }
-/**
-
-
-double statistical::quratilesIn(const double data[], int size, int q)
-{
-	// Q1 : 1/4(n+1)^thterm Q2:  3/4(n+1)^thterm Q2 : Q3 - Q1
-
-	if (size == 0)
-
-		return 0.0;
-
-	double pos = (q * (size + 1)) / 4.0;
-
-	if (floor(pos) == pos)
-	{
-		int idx = static_cast<int>(pos) - 1;
-		if (idx < 0) idx = 0;
-		if (idx >= size) idx = size - 1;
-		return data[idx];
-
-
-	}
-	else
-	{
-		int lower = static_cast<int>(floor(pos)) - 1;
-		int upper = lower + 1;
-
-		if (lower < 0) lower = 0;
-		if (upper >= size) upper = size - 1;
-
-		double fraction = pos - floor(pos);
-		return data[lower] + fraction * (data[upper] - data[lower]);
-
-
-	}
-}
-
-
-
-double statistical::quartilesIn(const double data[], int size)
-//IQR = Q3 -Q1
-{
-	if (size < 4) 
-		return 0.0;
-
-	double* sorted = new double[size];
-	for (int i = 0; i < size; i++)
-		sorted[i] = data[i];
-
-	std::sort(sorted, sorted + size);
-
-auto median = [](double arr[], int start, int end) -> double {
-	int length = end - start + 1;
-	int mid = start + length / 2;
-	if (length % 2 == 0)
-		return (arr[mid - 1] + arr[mid]) / 2.0;
-	else
-		return arr[mid];
-	};
-
-double q1 = median(sorted, 0, (size - 1) / 2);
-
-double q3 = median(sorted, 0, (size - 1) / 2);
-
-double result = q3 - q1;
-return result;
-}
-
-
-double statistical::outliers(const double data[], int size)
-{
-
-	if (size < 4)
-		return 0.0;
-
-	double* sorted = new double[size];
-	for (int i = 0; i < size; i++)
-		sorted[i] = data[i];
-
-	std::sort(sorted, sorted + size);
-
-	auto median = [](double arr[], int start, int end) -> double {
-		int length = end - start + 1;
-		int mid = start + length / 2;
-		if (length % 2 == 0)
-			return (arr[mid - 1] + arr[mid]) / 2.0;
-		else
-			return arr[mid];
-		};
-
-	double q1 = median(sorted, 0, (size - 1) / 2);
-
-	double q3 = median(sorted, (size + 1) / 2, size - 1);
-
-	double iqr = q3 - q1;
-
-	double lowerBound = q1 - 1.5 * iqr;
-
-	double upperBound = q3 + 1.5 * iqr;
-
-	int count = 0;
-	for (int i = 0; i < size; i++) {
-		if (data[i] < lowerBound || data[i] > upperBound)
-			count++;
-	}
-
-	delete[] sorted;
-	return count;
-
-}
-
-
-double statistical::thesumofsquares(const double data[], int size)
-	{
-	return 0.0;
-	}
-	*/
