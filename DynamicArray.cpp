@@ -1,8 +1,8 @@
-
 #include "DynamicArray.h"
 
 
 
+template class DynamicArray<double>;
 
 template <typename T>
 void DynamicArray<T>::mergeSort(T genericArr[], const int& beginningIndex, const int& endingIndex) {
@@ -15,11 +15,13 @@ void DynamicArray<T>::mergeSort(T genericArr[], const int& beginningIndex, const
 	merge(genericArr, beginningIndex, middle, endingIndex);
 }
 
+
 template <typename T>
 void DynamicArray<T>::merge(T genericArr[], const int& beginningIndex, const int& middle, const int& endingIndex)
 {
 	int leftSize = middle - beginningIndex + 1;
 	int rightSize = endingIndex - middle;
+
 
 	T* leftArray = new T[leftSize];
 	T* rightArray = new T[rightSize];
@@ -57,13 +59,15 @@ void DynamicArray<T>::merge(T genericArr[], const int& beginningIndex, const int
 	delete[] leftArray;
 	delete[] rightArray;
 }
-template <typename T>
-void DynamicArray<T>::sort() {
-	if (p_size > 1)
-		mergeSort(p_ptr, 0, p_size - 1);
-}
 
-template <typename T>
+template<typename T>
+void DynamicArray<T>::sort() {
+	if (p_size > 1) 
+		mergeSort(p_ptr, 0, p_size - 1);
+	}
+
+
+template<typename T>
 DynamicArray<T>::DynamicArray() {
 	p_ptr = nullptr;
 	p_size = 0;
@@ -71,14 +75,13 @@ DynamicArray<T>::DynamicArray() {
 template <typename T>
 DynamicArray<T>::DynamicArray(int new_size) {
 	if (new_size < 0) {
-		throw DynamicArray::OutOfRange("ERROR: INVALID SIZE ENTERED. ");
+		throw DynamicArray<T>::OutOfRange("ERROR: INVALID SIZE ENTERED. ");
 	}
 	p_ptr = new T[new_size];
 	p_size = new_size;
 }
 
-//making a copy 
-template <typename T>
+template<typename T>
 DynamicArray<T>::DynamicArray(const DynamicArray& rhs) {
 	if (rhs.p_size != 0 && rhs.p_ptr != nullptr) {
 		p_ptr = new T[rhs.p_size];
@@ -92,14 +95,12 @@ DynamicArray<T>::DynamicArray(const DynamicArray& rhs) {
 		p_size = rhs.p_size;
 	}
 }
-template <typename T>
+template<typename T>
 DynamicArray<T>::~DynamicArray() {
 	delete[] p_ptr;
 	p_ptr = nullptr;
 	p_size = 0;
 }
-
-//merge sort adding value to end of array 
 template <typename T>
 void DynamicArray<T>::append(const T& nVal) {
 	if (p_ptr != nullptr) {
@@ -137,6 +138,7 @@ void DynamicArray<T>::insert(const T& nVal, const int& sIndex) {
 	p_size++;
 	sort();
 }
+
 template <typename T>
 const T& DynamicArray<T>::retrieve(const int& sIndex) const {
 	if (sIndex < 0 || sIndex >= p_size) {
@@ -170,7 +172,7 @@ void DynamicArray<T>::remove(const int& sIndex) {
 	p_size--;
 }
 
-template <typename T>
+template<typename T>
 bool DynamicArray<T>::exists(const T& needle) const {
 	if (p_size == 0) return false;
 	for (int i = 0; i < p_size; i++) {
@@ -178,7 +180,7 @@ bool DynamicArray<T>::exists(const T& needle) const {
 	}
 	return false;
 }
-//return elements in array 
+
 template <typename T>
 int DynamicArray<T>::size() const {
 	return p_size;
