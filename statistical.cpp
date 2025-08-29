@@ -4,8 +4,118 @@
 #include <iostream>
 #include <algorithm>
 #include <cmath> // for floor
+#include <vector>
 
 using namespace std;
+
+double statistical::findMinimum(const double data[], int size)
+{
+    double minVal = data[0];
+
+    return minVal;
+}
+
+
+double statistical::findMaximum(const double data[], int size)
+{
+    double maxVal = data [size - 1];
+
+    return maxVal;
+}
+
+double statistical::findRange(const double data[], int size)
+{
+    double minVal = data[0];
+
+    double maxVal = data[size - 1];
+
+    double range = maxVal - minVal;
+
+    return range;
+    
+}
+
+double statistical::findSum(const double data[], int size)
+{
+    int sum = 0;
+
+    for (int i = 0; i < size; i++)
+    {
+        sum += data[i];
+    }
+
+    return sum;
+}
+
+double statistical::findMean(const double data[], int size)
+{
+    int sum = 0.0;
+    double mean = 0.0;
+    for (int i = 0; i < size; i++)
+    {
+        sum += data[i]; 
+    }
+
+    return mean = sum/size;
+}
+
+double statistical::findMedian(const double data[], int size)
+{
+    double median = 0.0;
+    median = data[size / 2];
+    if (size % 2 == 0)
+    {
+        median = (median + data[size / 2 - 1]) / 2;
+    }
+
+    return median;
+}
+
+vector<double> statistical::findMode(const double data[], int size)
+{
+    vector<double> modes;
+    int maxCount = 1;
+    int currentCount = 1;
+
+    for(int i = 1; i < size; i++)
+    {
+        if (data[i] == data[i - 1])
+        {
+            currentCount++;
+        }
+        else
+        {
+            currentCount = 1;
+        }
+
+        if (currentCount > maxCount)
+        {
+            maxCount = currentCount;
+        }
+       
+    }
+
+    currentCount = 1;
+    for (int i = 1; i <= size; i++)
+    {
+        if (i < size && data[i] == data[i - 1])
+        {
+            currentCount++;
+        }
+        else
+        {
+            if (currentCount == maxCount)
+            {
+                modes.push_back(data[i - 1]);
+            }
+
+            currentCount = 1;
+        }
+    }
+    return modes;
+}
+
+
 
 double statistical::varianceIn(const double data[], int size)
 {
@@ -143,3 +253,4 @@ double statistical::sumOfSquares(const double data[], int size)
     }
     return sum;
 }
+
