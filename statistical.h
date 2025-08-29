@@ -1,20 +1,40 @@
 #pragma once
+#ifndef STATISTICAL_H
+#define STATISTICAL_H
+
 #include "DynamicArray.h"
 
-class statistical
-{
+class Statistical {
+  
 public:
-	double varianceIn(const double data[], int);
+    DynamicArray<double> dataset;
+    
+    
+    Statistical(const DynamicArray<double>& dataset);
 
-	double midrangeIn(const double data[], int size);
 
-	double quratilesIn(const double data[], int size, int q);
+   static  double  standarddeviation(const DynamicArray<double>& dataset);
 
-	double quartilesIn(const double data[], int size);
+    static double varianceIn(const DynamicArray<double>& dataset);
 
-	double thesumofsquares(const double data[], int size);
+    static double midrangeIn(const DynamicArray<double>& dataset);
 
-	double outliers(const double data[], int size);
-}
+    static double quartilesIn(const DynamicArray<double>& dataset);
 
- //TO DO bool validateDataSet(const DynamicArray<double>& data);
+    static double  outliers(const DynamicArray<double>& dataset);
+
+    static  double mean(const DynamicArray<double>& data);
+
+    static double thesumofsquares(const DynamicArray<double>& dataset);
+
+    static double meanabsolutedeviation(const DynamicArray<double>& dataset); 
+
+   static double rootmeansquare(const DynamicArray<double>& dataset);
+
+private:
+
+    static double median(double arr[], int start, int end);
+};
+  
+
+#endif
