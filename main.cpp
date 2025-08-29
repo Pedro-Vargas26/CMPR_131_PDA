@@ -5,15 +5,23 @@
 #include "statistical.h"
 #include "DynamicArray.h"
 #include "DynamicArray.cpp"
-
+#include <vector>
 using namespace std;
 
-DynamicArray<double> dataset;   // FIXED
+DynamicArray<double> dataset;  
 
 char menuOption();
 int TaskJ();
 int Task1();
-char Task2();  // FIXED return type
+char Task2();  
+int getMin();
+int getMax();
+int getSum();
+int getRange(); 
+int getSize();
+int getMean();
+int getMedian();
+int getMode();
 int TaskK();
 //int TaskL();
 
@@ -33,6 +41,14 @@ int main()
         {
         case '0': exit(1); break;
         case '2': Task2(); break;
+        case 'A': getMin(); break;
+        case 'B': getMax(); break;
+        case 'C': getRange(); break;
+        case 'D': getSize(); break;
+        case 'E': getSum(); break;
+        case 'F': getMean(); break;
+        case 'G': getMedian(); break;
+        case 'H': getMode(); break;
         case 'J': TaskJ(); break;
         case 'K': TaskK(); break;
         //case 'L': TaskL(); break;
@@ -49,8 +65,8 @@ int main()
 char menuOption()
 {
     system("cls");
-    cout << "\n\tAddress of Dynamic array:"; //#
-    cout << "\n\tDataset:"; //sample
+    cout << "\n\tAddress of Dynamic array: "; //#
+    cout << "\n\tDataset: "; //sample
     if (dataset.size() == 0)
     {
         cout << "(sample)";
@@ -70,6 +86,14 @@ char menuOption()
     cout << "\n\t2. Insert sort value(s) to the Dataset";
     cout << "\n\t3. Delete value(s) from the Dataset";
     cout << "\n\t----------------------------------------------------------------------------------";
+    cout << "\n\tA. Find Minimum";
+    cout << "\n\tB. Find Maximum";
+    cout << "\n\tC. Find Range";
+    cout << "\n\tD. Find Size";
+    cout << "\n\tE. Find Sum";
+    cout << "\n\tF. Find Mean";
+    cout << "\n\tG. Find Median";
+    cout << "\n\tH. Find Mode";
     cout << "\n\tJ. Find Variance";
     cout << "\n\tK. Find Midrange";
     cout << "\n\tL. Find Quartiles";
@@ -138,7 +162,7 @@ char Task2()
 
     case 'B':
     {
-        int count = inputDouble("\n\tSpecify a number of values to be randomly generated into the Dataset:",1,1000);
+        int count = inputDouble("\n\tSpecify a number of values to be randomly generated into the Dataset: ",1,1000);
         srand(static_cast<unsigned>(time(nullptr)));
         for (int i = 0; i < count; i++)
         {
@@ -156,6 +180,197 @@ char Task2()
     }
     }
     //return 0;
+}
+
+int getMin()
+{
+    statistical stats;
+    int size = dataset.size();
+    
+    if (size < 2) 
+    {
+        cout << "\n\tERROR: Dataset must have at least 2 values.";
+        return 0;
+    }
+
+    double* data = new double[size];
+    for (int i = 0; i < size; i++)
+    {
+        data[i] = dataset.retrieve(i);
+    }
+
+    double minVal = stats.findMinimum(data, size);
+    cout << "\n\tMinimum = " << minVal;
+
+    delete[] data;
+    return 0;
+}
+
+int getMax()
+{
+    statistical stats; 
+    int size = dataset.size(); 
+    
+    if (size < 2) 
+    {
+        cout << "\n\tERROR: Dataset must have at least 2 values.";
+        return 0;
+    }
+
+    double* data = new double[size]; 
+    for (int i = 0; i < size; i++)
+    {
+        data[i] = dataset.retrieve(i);
+    }
+
+    double maxVal = stats.findMaximum(data, size);
+    cout << "\n\tMaximum = " << maxVal;
+
+    delete[] data;
+    return 0;
+}
+
+int getRange()
+{
+    statistical stats;
+    int size = dataset.size();
+    
+    if (size < 2) 
+    {
+        cout << "\n\tERROR: Dataset must have at least 2 values.";
+        return 0;
+    }
+    double* data = new double[size];
+    for (int i = 0; i < size; i++)
+    {
+        data[i] = dataset.retrieve(i);
+    }
+
+    double range = stats.findRange(data, size);
+    cout << "\n\tRange = " << range;
+
+    delete[] data;
+    return 0;
+}
+
+int getSize()
+{
+    statistical stats;
+    int size = dataset.size();
+
+    if (size < 2)
+    {
+        cout << "\n\tERROR: Dataset must have at least 2 values.";
+        return 0;
+    }
+    double* data = new double[size];
+    for (int i = 0; i < size; i++)
+    {
+        data[i] = dataset.retrieve(i);
+    }
+
+    cout << "\n\tSize = " << size;
+
+    delete[] data;
+    return 0;
+}
+
+int getSum()
+{
+    statistical stats; 
+    int size = dataset.size(); 
+
+    if (size < 2) 
+    {
+        cout << "\n\tERROR: Dataset must have at least 2 values."; 
+        return 0; 
+    }
+    double* data = new double[size]; 
+    for (int i = 0; i < size; i++) 
+    {
+        data[i] = dataset.retrieve(i); 
+    } 
+    
+    int sum = stats.findSum(data, size);
+    cout << "\n\tSum = " << sum;
+
+    delete[] data;
+    return 0;
+}
+
+int getMean()
+{
+    statistical stats;
+    int size = dataset.size();
+
+    if (size < 2)
+    {
+        cout << "\n\tERROR: Dataset must have at least 2 values.";
+        return 0;
+    }
+    double* data = new double[size];
+    for (int i = 0; i < size; i++)
+    {
+        data[i] = dataset.retrieve(i);
+    }
+
+    double mean = stats.findMean(data, size);
+
+    cout << "\n\tMean = " << fixed << setprecision(2) << mean;
+
+    delete[] data;
+    return 0;
+}
+
+int getMedian()
+{
+    statistical stats; 
+    int size = dataset.size(); 
+
+    if (size < 2)
+    {
+        cout << "\n\tERROR: Dataset must have at least 2 values.";
+        return 0;
+    }
+    double* data = new double[size];
+    for (int i = 0; i < size; i++)
+    {
+        data[i] = dataset.retrieve(i);
+    }
+
+    double median = stats.findMedian(data, size);
+
+    cout << "\n\tMedian = " << fixed << setprecision(2) << median;
+
+    delete[] data;
+    return 0;
+}
+
+int getMode()
+{
+    statistical stats;
+    int size = dataset.size();
+
+    if (size < 2)
+    {
+        cout << "\n\tERROR: Dataset must have at least 2 values.";
+        return 0;
+    }
+    double* data = new double[size];
+    for (int i = 0; i < size; i++)
+    {
+        data[i] = dataset.retrieve(i);
+    }
+
+    vector<double> modes = stats.findMode(data, size);
+    cout << "\n\tMode(s) =  ";
+    for (double m : modes)
+    {
+        cout << m << " ";
+    }
+    
+    delete[] data;
+    return 0;
 }
 
 int TaskJ()
