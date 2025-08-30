@@ -1,365 +1,372 @@
-#include "input.h"
-#include <iomanip>
 #include <iostream>
+#include <iomanip>
 #include <cstdlib>
-#include "Statistical.h"
+#include "input.h"
 #include "DynamicArray.h"
-#include <vector>
+#include "Statistical.h"
 
 using namespace std;
-DynamicArray<double> dataset;  
+DynamicArray<double> dataset;
 
 char menuOption();
-int getMin();
-int getMax();
-int getSum();
-int getRange();
-int getSize();
-int getMean();
-int getMedian();
-int getMode();
-double TaskI();
-double TaskJ();
-double TaskK();
-double TaskL();
-double TaskM();
-double TaskN();
-double TaskO();
-double TaskP();
-double TaskQ();
-int Task1();
-char Task2();  
+int OptionOne();
+int OptionTwo();
+int OptionThree();
+
+void TaskA();
+void TaskB();
+void TaskC();
+void TaskD();
+void TaskE();
+void TaskF();
+void TaskG();
+void TaskH();
+void TaskI();
+void TaskJ();
+void TaskK();
+void TaskL();
+void TaskM();
+void TaskN();
+void TaskO();
+void TaskP();
+void TaskQ();
 
 int main()
 {
-    cout << "\n\tWhat are Descriptive Statistics?";
-    cout << "\n\n\tDescriptive statistics summarize certain aspects of a data set (Sample or Population) using numeric calculations.";
-    cout << "\n\thttps://www.calculatorsoup.com/calculators/statistics/descriptivestatistics.php.";
-    cout << "\n\n\tPress any key to continue...";
 
-    system("pause");
-    system("cls");
+	cout << "\n\tWhat are Descriptive Statistics?";
+	cout << "\n\n\tDescriptive statistics summarize certain aspects of a data set (Sample or Population) using numeric calculations.";
+	cout << "\n\thttps://www.calculatorsoup.com/calculators/statistics/descriptivestatistics.php.";
+	cout << "\n\n\tPress any key to continue...";
 
-    do
-    {
-        switch (menuOption())
-        {
-        case '0': exit(1); break;
-        case '2': Task2(); break;
-        case 'A': getMin(); break;
-        case 'B': getMax(); break;
-        case 'C': getRange(); break;
-        case 'D': getSize(); break;
-        case 'E': getSum(); break;
-        case 'F': getMean(); break;
-        case 'G': getMedian(); break;
-        case 'H': getMode(); break;
-        case 'J': TaskJ(); break;
-        case 'K': TaskK(); break;
-        //case 'L': TaskL(); break;
-        default: cout << "\t\tERROR - Invalid option. Please re-enter."; break;
-        }
+	system("pause");
+	system("cls");
 
-        cout << "\n";
-        system("pause");
-    } while (true);
+	do
+	{
+		switch (menuOption())
+		{
+		case '0': exit(0); break;
+		case '1': OptionOne(); break;
+		case '2': OptionTwo(); break;
+			//case 3: Task3(); break;
 
-    return EXIT_SUCCESS;
+		case 'A': TaskA(); break;
+		case 'B': TaskB(); break;
+		case 'C': TaskC(); break;
+		case 'D': TaskD(); break;
+		case 'E': TaskE(); break;
+		case 'F': TaskF(); break;
+		case 'G': TaskG(); break;
+		case 'H': TaskH(); break;
+		case 'I': TaskI(); break;
+		case 'J': TaskJ(); break;
+		case 'K': TaskK(); break;
+		case 'L': TaskL(); break;
+		case 'M': TaskM(); break;
+		case 'N': TaskN(); break;
+		case 'O': TaskO(); break;
+		case 'P': TaskP(); break;
+		case 'Q': TaskQ(); break;
+			// case 'R': TaskR(); break;
+			// case 'S': TaskS(); break;
+			// case 'T': TaskT(); break;
+			// case 'U': TaskU(); break;
+			// case 'V': TaskV(); break;
+			// case 'W': TaskW(); break;
+			// case 'X': TaskX(); break;
+			// case 'Y': TaskY(); break;
+			// case 'Z': TaskZ(); break;
+		default: cout << "\t\tERROR - Invalid option. Please re-enter."; break;
+		}
+		cout << "\n";
+		system("pause");
+	} while (true);
+	return EXIT_SUCCESS;
 }
+
+//TODO 	case 'J': if (!validateDataSet(dataset)) break; TaskJ(); break; validate there is a data set prior to allowing A-Z
 
 char menuOption()
 {
-    system("cls");
-    cout << "\n\tAddress of Dynamic array: "; //#
-    cout << "\n\tDataset: "; //sample
-    if (dataset.size() == 0)
-    {
-        cout << "(sample)";
-    }
-    else
-    {
-        for (int i = 0; i < dataset.size(); i++)
-        {
-            cout << dataset.retrieve(i) << " ";
-        }
-    }
-    cout << "\n\n\tERROR: Data set requires at least 2 values.";
-    cout << "\n\tDescriptive Statistics Calculator Main Menu";
-    cout << "\n\t================================================================================";
-    cout << "\n\t0.Exit";
-    cout << "\n\t1. Configure Dataset to Sample or Population";
-    cout << "\n\t2. Insert sort value(s) to the Dataset";
-    cout << "\n\t3. Delete value(s) from the Dataset";
-    cout << "\n\t----------------------------------------------------------------------------------";
-    cout << "\n\tA. Find Minimum";
-    cout << "\n\tB. Find Maximum";
-    cout << "\n\tC. Find Range";
-    cout << "\n\tD. Find Size";
-    cout << "\n\tE. Find Sum";
-    cout << "\n\tF. Find Mean";
-    cout << "\n\tG. Find Median";
-    cout << "\n\tH. Find Mode";
-    cout << "\n\tJ. Find Variance";
-    cout << "\n\tK. Find Midrange";
-    cout << "\n\tL. Find Quartiles";
-    cout << "\n\t================================================================================";
+	system("cls");
+	cout << "\n\tAddress of Dynamic array:" << dataset.data() << endl;
+	cout << "\n\tDataset: "; //sample 
+	if (dataset.size() == 0)
+	{
+		cout << "(sample)";
+	}
+	else
+	{
+		for (int i = 0; i < dataset.size(); i++)
+		{
+			cout << dataset.retrieve(i) << " ";
+		}
+	}
+	cout << "\n\n\tERROR: Data set requires at least 2 values.";
+	cout << "\n\tDescriptive Statistics Calculator Main Menu";
+	cout << "\n\t================================================================================";
+	cout << "\n\t0.Exit";
+	cout << "\n\t1. Configure Dataset to Sample or Polulation";
+	cout << "\n\t2. Insert sort value(s) to the Dataset";
+	cout << "\n\t3. Delete value(s) from the Dataset";
+	cout << "\n\t----------------------------------------------------------------------------------";
+	cout << "\n\tA. Find Minimum                                N. Find Outliers ";
+	cout << "\n\tB. Find Maximum                                O. Find Sum of Squares";
+	cout << "\n\tC. Find Range                                  P. Find Mean Absolute Deviation";
+	cout << "\n\tD. Find Size                                   Q. Find Root Mean Square";
+	cout << "\n\tE. Find Sum                                    R. Find Standard Error of Mean";
+	cout << "\n\tF. Find Mean                                   S. Find Skewness";
+	cout << "\n\tG. Find Median                                 T. Find Kurtosis";
+	cout << "\n\tH. Find Mode(s)                                U. Find Kurtosis Excess";
+	cout << "\n\tI. Find Standard Deviation                     V. Find Coefficient of Variation";
+	cout << "\n\tJ. Find Variance                               W. Find Relative Standard Deviation";
+	cout << "\n\tK. Find Midrange                               X. Display Frequency Table";
+	cout << "\n\tL. Find Quartiles                              Y. Display ALL statical results";
+	cout << "\n\tM. Find Interquartile Range                    Z. Output ALL statical results to text file";
+	cout << "\n\t================================================================================";
 
-    return toupper(inputChar("\n\tOption: "));
-}
-
-int Task1()
-{
-    cout << "\n\t In statistics, Population refers to the entire group of data";
-    cout << "\n\tpoints that a study is interested in, while a Sample is a";
-    cout << "\n\tsubset of that population that is actually used in the study.";
-    cout << "\n\t\nConfigure Dataset Menu";
-    cout << "\n\t================================================================================";
-    cout << "\n\tA. sample";
-    cout << "\n\tB. population";
-    cout << "\n\t--------------------------------------------------------------------------------";
-    cout << "\n\tR. return";
-    cout << "\n\t================================================================================";
-
-    char option = inputChar("\n\tOption: ", "ABR");
-
-    switch (option) {
-    case 'A': {
-        double value;
-        char again;
-        do {
-            value = inputDouble("\n\tEnter a value to insert: ");
-            dataset.append(value);   // use DynamicArray
-            again = inputChar("\n\tAdd another? (Y/N): ", "YN");
-        } while (again == 'Y');
-        break;
-    }
-    case 'B':
-        return 0;
-    case 'R':
-        return 0;
-    }
-    return 0;
-}
-
-char Task2()
-{
-    char option = 0;
-    do
-    {
-        system("cls");
-        cout << "\n\t Insert (sort) Dataset Menu";
-        cout << "\n\t================================================================================";
-        cout << "\n\tA. insert a value";
-        cout << "\n\tB. insert a specified number of random values";
-        cout << "\n\tC. read data from file and insert values";
-        cout << "\n\t================================================================================";
-        cout << "\n\tR. return";
-        cout << "\n\t================================================================================";
-        option = toupper(inputChar("\n\tOption: ", "ABCR"));
-
-        switch (option)
-        {
-
-        case 'A':
-        {
-            double value;
-            value = inputDouble("\n\tSpecify an integer value to be inserted to the Dataset: ");
-            dataset.append(value);
-
-            cout << "\n\t" << value << " has been inserted...";
-            cout << "\n\n";
-            system("pause");
-            break;
-        }
-
-        case 'B':
-        {
-            int count = inputDouble("\n\tSpecify a number of values to be randomly generated into the Dataset: ", 1, 1000);
-            srand(static_cast<unsigned>(time(nullptr)));
-            for (int i = 0; i < count; i++)
-            {
-                double value = rand() % 100 + 1;
-                dataset.append(value);
-            }
-
-            cout << "\n\tCONFIRMATION: Inserted " << count << " random values into the Dataset.";
-            cout << "\n\n";
-            system("pause");
-
-            break;
-        }
-
-
-        case 'R':
-        {
-            return 0;
-        }
-        }
-    } while (option != 0);
-    //return 0;
-}
-
-int getMin()
-{
-    Statistical stats(dataset);
-
-    double Minimum = stats.findMinimum();
-
-    cout << "\n\tMinimum = " << Minimum;
-   
-    return Minimum;
-}
-
-int getMax()
-{
-    Statistical stats(dataset);
-
-    double Maximum = stats.findMaximum();
-
-    cout << "\n\tMaximum = " << Maximum;
-
-    return Maximum;
-}
-
-int getRange()
-{
-    Statistical stats(dataset);
-
-    double Range = stats.findRange();
-
-    cout << "\n\tRange = " << Range;
-
-    return Range;
-}
-
-int getSize()
-{
-    Statistical stats(dataset);
-
-    double Size = dataset.size();
-
-    cout << "\n\tSize = " << Size;
-
-    return Size;
-}
-
-int getSum()
-{
-    Statistical stats(dataset);
-
-    double Sum = stats.findSum();
-
-    cout << "\n\tSum = " << Sum;
-
-    return Sum;
-}
-
-int getMean()
-{
-    Statistical stats(dataset);
-
-    double Mean = stats.findMean();
-
-    cout << "\n\tMean = " << fixed << setprecision(2) << Mean << defaultfloat;
-
-    return Mean;
-}
-
-int getMedian()
-{
-    Statistical stats(dataset);
-
-    double Median = stats.findMedian();
-
-    cout << "\n\tMedian = " << fixed << setprecision(2) << Median << defaultfloat;
-
-    return Median;
-}
-
-int getMode()
-{
-    Statistical stats(dataset);
-
-    int modeCount = 0;
-    double* modes = stats.findMode(modeCount);
-
-    cout << "\n\tMode(s) = ";
-    for (int i = 0; i < modeCount; i++)
-        cout << modes[i] << " ";
-
-    delete[] modes; // free memory
-    return 0;
-}
-
-double TaskI()
-{
-
-    Statistical stats(dataset);
-    double stddev = stats.standarddeviation();
-    std::cout << "Sample standard deviation =  " << stddev;
-    return stddev;
-}
-
-double TaskJ()
-{
-    Statistical stats(dataset);
-    double vrnce = stats.varianceIn();
-    std::cout << "Variance =  " << vrnce;
-    return vrnce;
-
-}
-double TaskK()
-{
-    Statistical stats(dataset);
-    double mdrnge = stats.midrangeIn();
-    std::cout << "Midrange =  " << mdrnge;
-    return mdrnge;
+	return toupper(inputChar("\n\tOption: "));
 
 }
 
-double TaskL()
+int OptionOne()
+
 {
-    Statistical stats(dataset);
-    double iqr = stats.quartilesIn();
-    return iqr;
+	system("cls");
+	cout << "\n\t In statistics, Population refers to the entire group of data";
+	cout << "\n\tpoints that a study is interested in, while a Sample is a";
+	cout << "\n\tsubset of that population that is actually used in the study.";
+
+	cout << "\n\tConfigure Dataset Menu";
+	cout << "\n\t ============================================================";
+	cout << "\n\tA. sample";
+	cout << "\n\tB. population";
+	cout << "\n\t ============================================================";
+	cout << "\n\tR. Return";
+	cout << "\n\t ============================================================";
+
+	return 0;
 }
 
-double TaskM()
+int OptionTwo()
+
 {
-    //needs to only reurn IQR
-    Statistical stats(dataset);
-    double iqr = stats.quartilesIn();
-    return iqr;
+	while (true)
+	{
+		system("cls");
+		cout << "\n\tInsert (sort) Dataset Menu";
+		cout << "\n\t ============================================================";
+		cout << "\n\tA. insert a value";
+		cout << "\n\tB. insert a specified number of random values";
+		cout << "\n\tC. read data from file and insert values";
+		cout << "\n\t ============================================================";
+		cout << "\n\tR. Return";
+		cout << "\n\t ============================================================";
+
+
+		char option2 = inputChar("\n\tOption: ", "ABCR");
+
+		switch (option2)
+
+		{
+		case 'a':
+		{
+			int value = inputInteger("\n\tSpecify an integer value to be inserted to the Dataset: ");
+			dataset.append(value);
+			cout << "\n\t" << value << " has been inserted";
+			system("pause");
+			break;
+		}
+
+		case 'r':
+			return 1; // Return to main menu
+
+		case 'b':
+			break;
+		case 'c':
+			break;
+
+		default:
+			cout << "\n\tInvalid option. Try again.\n";
+			break;
+		}
+	}
+
 }
 
-double TaskN()
+int OptionThree()
+
 {
-    Statistical stats(dataset);
-    double out = stats.outliers();
-    std::cout << "Outliers =  " << out;
-    return out;
+	system("cls");
+	cout << "\n\tDelete Dataset Menu";
+	cout << "\n\tA. delete a value";
+	cout << "\n\t B. delete a range of values";
+	cout << "\n\tC. delete all values";
+	cout << "\n\t ============================================================";
+	cout << "\n\tR. Return";
+	cout << "\n\t ============================================================";
+
+	return 0;
 }
 
-double TaskO()
+
+void TaskA()
 {
-    Statistical stats(dataset);
-    double sumsquares = stats.thesumofsquares();
-    std::cout << "Sum of Squares = " << sumsquares;
-    return sumsquares;
+
+	
+	Statistical stats(dataset);
+
+	double Minimum = stats.minimum();
+
+	cout << "\n\tMinimum = " << Minimum;
+
 }
 
-double TaskP()
+void TaskB()
 {
-    Statistical stats(dataset);
-    double mnabsdeviation = stats.meanabsolutedeviation();
-    std::cout << "Mean Absoulte Deviation = " << mnabsdeviation;
-    return mnabsdeviation;
+	Statistical stats(dataset);
+
+	double Maximum = stats.maximum();
+
+	cout << "\n\tMaximum = " << Maximum;
+
 }
 
-double TaskQ()
+void TaskC()
 {
-    Statistical stats(dataset);
-    double rtmeansquare = stats.rootmeansquare();
-    std::cout << "Root Mean Square = " << rtmeansquare;
-    return rtmeansquare;
+	Statistical stats(dataset);
+
+	double Range = stats.range();
+
+	cout << "\n\tRange = " << Range;
+
+}
+
+void TaskD()
+{
+	Statistical stats(dataset);
+
+	double Size = dataset.size();
+
+	cout << "\n\tSize = " << Size;
+
+}
+
+void TaskE()
+{
+	Statistical stats(dataset);
+
+	double Sum = stats.sum();
+
+	cout << "\n\tSum = " << Sum;
+
+}
+
+void TaskF()
+{
+	Statistical stats(dataset);
+
+	double Mean = stats.mean();
+
+	cout << "\n\tMean = " << fixed << setprecision(2) << Mean << defaultfloat;
+
+}
+
+void TaskG()
+{
+	Statistical stats(dataset);
+
+	double Median = stats.median();
+
+	cout << "\n\tMedian = " << fixed << setprecision(2) << Median << defaultfloat;
+
+}
+
+void TaskH()
+{
+	Statistical stats(dataset);
+
+	int modeCount = 0;
+	double* modes = stats.mode(modeCount);
+
+	cout << "\n\tMode(s) = ";
+	for (int i = 0; i < modeCount; i++)
+		cout << modes[i] << " ";
+
+	delete[] modes; // free memory
+
+}
+
+void TaskI()
+{
+
+	Statistical stats(dataset);
+	double stddev = stats.standardDeviation();
+	std::cout << "Sample standard deviation =  " << stddev;
+
+}
+
+void TaskJ()
+{
+	Statistical stats(dataset);
+	double vrnce = stats.varianceIn();
+	std::cout << "Variance =  " << vrnce;
+
+
+}
+void TaskK()
+{
+	Statistical stats(dataset);
+	double mdrnge = stats.midRange();
+	std::cout << "Midrange =  " << mdrnge;
+
+
+}
+
+void TaskL()
+{
+	Statistical stats(dataset);
+	double iqr = stats.quartiles();
+
+}
+
+void TaskM()
+{
+	//needs to only reurn IQR
+	Statistical stats(dataset);
+	double iqr = stats.quartiles();
+
+}
+
+void TaskN()
+{
+	Statistical stats(dataset);
+	double out = stats.outliers();
+	std::cout << "Outliers =  " << out;
+
+}
+
+void TaskO()
+{
+	Statistical stats(dataset);
+	double sumsquares = stats.SumOfSquares();
+	std::cout << "Sum of Squares = " << sumsquares;
+
+}
+
+void TaskP()
+{
+	Statistical stats(dataset);
+	double mnabsdeviation = stats.meanAbsoluteDeviation();
+	std::cout << "Mean Absolute Deviation = " << mnabsdeviation;
+
+}
+
+void TaskQ()
+{
+	Statistical stats(dataset);
+	double rtmeansquare = stats.rootMeanSquare();
+	std::cout << "Root Mean Square = " << rtmeansquare;
+
 }
