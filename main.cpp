@@ -209,23 +209,23 @@ double TaskI()
 {
 
 	Statistical stats(dataset);
-	double stddev = Statistical::standarddeviation(dataset); 
+	double stddev = stats.standarddeviation(); 
 	std::cout << "Sample standard deviation =  "<< stddev ;
 	return stddev;
 }
 
 double TaskJ()
 {
-	Statistical sats(dataset);
-	double vrnce = Statistical::varianceIn(dataset);
+	Statistical stats(dataset);
+	double vrnce = stats.varianceIn();
 	std::cout << "Variance =  " << vrnce;
 	return vrnce;
 
 }
 double TaskK()
 {
-	Statistical sats(dataset);
-	double mdrnge = Statistical::midrangeIn(dataset);
+	Statistical stats(dataset);
+	double mdrnge = stats.midrangeIn();
 	std::cout << "Midrange =  " << mdrnge;
 	return mdrnge;
 
@@ -234,7 +234,7 @@ double TaskK()
 double TaskL()
 {
 	Statistical stats(dataset);
-	double iqr = stats.quartilesIn(dataset);
+	double iqr = stats.quartilesIn();
 	return iqr;
 }
 
@@ -242,14 +242,14 @@ double TaskM()
 {
 	//needs to only reurn IQR
 	Statistical stats(dataset);
-	double iqr = stats.quartilesIn(dataset);
+	double iqr = stats.quartilesIn();
 	return iqr;
 }
 
 double TaskN()
 {
 		Statistical stats(dataset);
-		double out = stats.outliers(dataset);
+		double out = stats.outliers();
 		std::cout << "Outliers =  " << out;
 		return out;
 }
@@ -257,7 +257,7 @@ double TaskN()
 double TaskO()
 {
 	Statistical stats(dataset);
-	double sumsquares = stats.thesumofsquares(dataset); 
+	double sumsquares = stats.thesumofsquares(); 
 	std::cout << "Sum of Squares = " <<sumsquares;
 	return sumsquares;
 }
@@ -265,7 +265,7 @@ double TaskO()
 double TaskP()
 {
 	Statistical stats(dataset);
-	double mnabsdeviation = stats.meanabsolutedeviation(dataset);
+	double mnabsdeviation = stats.meanabsolutedeviation();
 	std::cout << "Mean Absoulte Deviation = " << mnabsdeviation;
 	return mnabsdeviation;
 }
@@ -273,9 +273,8 @@ double TaskP()
 double TaskQ()
 {
 	Statistical stats(dataset);
-	double rtmeansquare = stats.rootmeansquare(dataset);
+	double rtmeansquare = stats.rootmeansquare();
 	std::cout << "Root Mean Square = " << rtmeansquare;
 	return rtmeansquare;
 }
-
 
