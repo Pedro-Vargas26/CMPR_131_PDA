@@ -1,46 +1,51 @@
-#include "DynamicArray.h"
-#include "DynamicArray.cpp"
-
 #pragma once
 
-#ifndef STATSTICAL_H
-#define STATISTICAL_H
-class Statistical {
+#ifndef DYNAMICARRAY_H
+#define DYNAMICARRAY_H
+
+#include <exception>
+using std::exception;
+
+template<typename T>
+class DynamicArray
+{
 private:
-	DynamicArray<double> dataset;
-    double median(double arr[], int start, int end);
+	int p_size;
+	T* p_ptr;
+
+
+	void mergeSort(T genericArr[], const int& beginningIndex, const int& endingIndex);
+	void merge(T [], const int& , const int& , const int& );
+	void sort();
+
+	class OutOfRange : public exception {
+	private:
+		const char* msg;
+
+	public:
+		OutOfRange() : msg("ERROR: INVALID RANGE ENTERED. "){}
+		OutOfRange(const char* nMsg) : msg(nMsg) {}
+		const char* what() noexcept {
+			return msg;
+		}
+	};
 public:
+	DynamicArray();
+	DynamicArray(int);
+	DynamicArray(const DynamicArray&);
+	~DynamicArray();
 
-    Statistical(const DynamicArray<double>& dataset);
+	void append(const T&);
+	void insert(const T&, const int&);
+	const T& retrieve(const int&) const;
+	void remove(const int&);
+	bool exists(const T&) const;
+	int size()const;
 
-    /*Anthony's Portion*/
-        
-    double minimum();
-    double maximum();
-    double range();
-    double sum();
-    double mean() const;
-    double median();
-    double* mode(int& modeCount);
+	DynamicArray& operator=(const DynamicArray&);
 
-
-    /*Daisy's Portion*/
-    double varianceIn();
-    double standardDeviation();
-    double midRange();
-    double quartiles();
-    double outliers();
-    double SumOfSquares();
-    double meanAbsoluteDeviation();
-    double rootMeanSquare();
-
-
-
-
-    /*Pedros Portion*/
-
-
+	const T* data() const;
+	friend class Statistical;
 };
 
 #endif
-
