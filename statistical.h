@@ -1,32 +1,46 @@
-#pragma once
 #include "DynamicArray.h"
-#include <vector>
+#include "DynamicArray.cpp"
 
-class Statistical
-{
+#pragma once
+
+#ifndef STATSTICAL_H
+#define STATISTICAL_H
+class Statistical {
 private:
-    DynamicArray<double> dataset;
+	DynamicArray<double> dataset;
+    double median(double arr[], int start, int end);
 public:
 
     Statistical(const DynamicArray<double>& dataset);
-    double mean() const;
-    double varianceIn();
-    double standarddeviation();
-    double midrangeIn();
-    double quartilesIn();
-    double outliers();
-    double thesumofsquares();
-    double median(double arr[], int start, int end);
-    double meanabsolutedeviation();
-    double rootmeansquare();
 
-    double findMinimum();
-    double findMaximum();
-    double findRange();
-    double findSum();
-    double findMean();
-    double findMedian();
-    double* findMode(int& modeCount);
+    /*Anthony's Portion*/
+        
+    double minimum();
+    double maximum();
+    double range();
+    double sum();
+    double mean() const;
+    double median();
+    double* mode(int& modeCount);
+
+
+    /*Daisy's Portion*/
+    double varianceIn();
+    double standardDeviation();
+    double midRange();
+    double quartiles();
+    double outliers();
+    double SumOfSquares();
+    double meanAbsoluteDeviation();
+    double rootMeanSquare();
+
+
+
+
+    /*Pedros Portion*/
+
+
 };
 
-// TO DO: bool validateDataSet(const DynamicArray<double>& data);
+#endif
+
