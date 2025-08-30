@@ -4,13 +4,11 @@
 #include <algorithm>
 #include <iostream> 
 
-
-
 using namespace std;
 
 Statistical::Statistical(const DynamicArray<double>& data) : dataset(data) {}
 
-double Statistical::mean(const DynamicArray<double>& dataset)
+double Statistical::mean() const
 {
     int size = dataset.size();
     if (size == 0) return 0.0;
@@ -22,7 +20,7 @@ double Statistical::mean(const DynamicArray<double>& dataset)
     return sum / size;
 }
 
-double Statistical::standarddeviation(const DynamicArray<double>& dataset)
+double Statistical::standarddeviation()
 {
     //standarddeviation : mean --
     int n = dataset.size();
@@ -32,7 +30,7 @@ double Statistical::standarddeviation(const DynamicArray<double>& dataset)
         return 0.0;
     }
     
-    double m = Statistical::mean(dataset);
+    double m = Statistical::mean();
 
 
 
@@ -45,7 +43,7 @@ double Statistical::standarddeviation(const DynamicArray<double>& dataset)
     return std::sqrt(totalSquaredDiff / (n - 1));  // Sample std dev denominator is n-1
 }
 
-double Statistical::varianceIn(const DynamicArray<double>& dataset)
+double Statistical::varianceIn()
 {
     int size = dataset.size();
     if (size < 2)
@@ -66,7 +64,7 @@ double Statistical::varianceIn(const DynamicArray<double>& dataset)
     return variance / (size - 1);
 }
 
-double Statistical::midrangeIn(const DynamicArray<double>& dataset)
+double Statistical::midrangeIn()
 {
     int size = dataset.size();
     if (size == 0)
@@ -84,7 +82,7 @@ double Statistical::midrangeIn(const DynamicArray<double>& dataset)
     return (minVal + maxVal) / 2.0;
 }
 
-double Statistical::quartilesIn(const DynamicArray<double>& dataset)
+double Statistical::quartilesIn()
 {
     int size = dataset.size();
     double q1, q2, q3, iqr;
@@ -128,8 +126,7 @@ double Statistical::quartilesIn(const DynamicArray<double>& dataset)
     return iqr;
 }
 
-
-double Statistical::outliers(const DynamicArray<double>& dataset)
+double Statistical::outliers()
 {
     int size = dataset.size();
     if (size < 4)
@@ -165,7 +162,7 @@ double Statistical::outliers(const DynamicArray<double>& dataset)
     return count;
 }
 
-double Statistical::thesumofsquares(const DynamicArray<double>& dataset)
+double Statistical::thesumofsquares()
 {
     int size = dataset.size();
     if (size == 0)
@@ -198,13 +195,13 @@ double Statistical::median(double arr[], int start, int end)
         return arr[mid];
 }
 
-double Statistical::meanabsolutedeviation(const DynamicArray<double>& dataset) {
+double Statistical::meanabsolutedeviation() {
     int size = dataset.size();
     if (size == 0) return 0.0;
    
     //using mean function
 
-    double m = Statistical::mean(dataset);
+    double m = Statistical::mean();
   
 
     double sumAbsoluteDiff = 0.0;
@@ -216,9 +213,7 @@ double Statistical::meanabsolutedeviation(const DynamicArray<double>& dataset) {
     return sumAbsoluteDiff / size;
 }
 
-
-
-double Statistical::rootmeansquare(const DynamicArray<double>& dataset) {
+double Statistical::rootmeansquare() {
     int n = dataset.size();
     if (n == 0) {
         return 0.0; 
