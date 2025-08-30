@@ -1,357 +1,206 @@
-#include "Statistical.h"
 #include "DynamicArray.h"
 
-#include <iostream>
-#include <algorithm>
-#include <cmath> // for floor
-#include <vector>
 
-using namespace std;
 
-Statistical::Statistical(const DynamicArray<double>& data) : dataset(data) {}
 
-double Statistical::mean() const
+
+template <typename T>
+void DynamicArray<T>::mergeSort(T genericArr[], const int& beginningIndex, const int& endingIndex) {
+	if (beginningIndex >= endingIndex) {
+		return;
+	}
+	int middle = beginningIndex + (endingIndex - beginningIndex) / 2;
+	mergeSort(genericArr, beginningIndex, middle);
+	mergeSort(genericArr, middle + 1, endingIndex);
+	merge(genericArr, beginningIndex, middle, endingIndex);
+}
+
+
+template <typename T>
+void DynamicArray<T>::merge(T genericArr[], const int& beginningIndex, const int& middle, const int& endingIndex)
 {
-    int size = dataset.size();
-    if (size == 0) throw std::exception("Exception ERROR: Dataset is empty. ");
+	int leftSize = middle - beginningIndex + 1;
+	int rightSize = endingIndex - middle;
 
-    double sum = 0.0;
-    for (int i = 0; i < size; ++i)
-        sum += dataset.retrieve(i);
 
-    return sum / size;
+	T* leftArray = new T[leftSize];
+	T* rightArray = new T[rightSize];
+
+	for (int i = 0; i < leftSize; i++) {
+		leftArray[i] = genericArr[beginningIndex + i];
+	}
+	for (int j = 0; j < rightSize; j++) {
+		rightArray[j] = genericArr[middle + 1 + j];
+	}
+	int i = 0;
+	int j = 0;
+	int k = beginningIndex;
+	while (i < leftSize && j < rightSize) {
+		if (leftArray[i] <= rightArray[j]) {
+			genericArr[k] = leftArray[i];
+			i++;
+		}
+		else {
+			genericArr[k] = rightArray[j];
+			j++;
+		}
+		k++;
+	}
+	while (i < leftSize) {
+		genericArr[k] = leftArray[i];
+		i++;
+		k++;
+	}
+	while (j < rightSize) {
+		genericArr[k] = rightArray[j];
+		j++;
+		k++;
+	}
+	delete[] leftArray;
+	delete[] rightArray;
+	}
+
+template<typename T>
+void DynamicArray<T>::sort() {
+	if (p_size > 1) 
+		mergeSort(p_ptr, 0, p_size - 1);
 }
 
-double Statistical::standardDeviation()
-{
-
-    if (dataset.size() <= 1)
-        throw std::exception("\n\tERROR: data set requires at least 2 values.\n");
-
-    //standarddeviation : mean --
-    int n = dataset.size();
-
-
-   
-    double m = Statistical::mean();
-
-
-
-    double totalSquaredDiff = 0.0;
-    for (int i = 0; i < n; ++i) {
-        double diff = dataset.retrieve(i) - m;
-        totalSquaredDiff += diff * diff;
-    }
-
-    return std::sqrt(totalSquaredDiff / (n - 1));  // Sample std dev denominator is n-1
+template<typename T>
+DynamicArray<T>::DynamicArray() {
+	p_ptr = nullptr;
+	p_size = 0;
+}
+template <typename T>
+DynamicArray<T>::DynamicArray(int new_size) {
+	if (new_size < 0) {
+		throw DynamicArray<T>::OutOfRange("ERROR: INVALID SIZE ENTERED. ");
+	}
+	p_ptr = new T[new_size];
+	p_size = new_size;
 }
 
-double Statistical::varianceIn()
-{
-    int size = dataset.size();
-    if (size < 2)
-        throw std::exception("\n\tException ERROR: Dataset must contain at least two elements. \n");
-
-    double sum = 0.0;
-    for (int i = 0; i < size; ++i)
-        sum += dataset.retrieve(i);
-
-    double mean = sum / size;
-
-    double variance = 0.0;
-    for (int i = 0; i < size; ++i)
-    {
-        double diff = dataset.retrieve(i) - mean;
-        variance += diff * diff;
-    }
-    return variance / (size - 1);
+template<typename T>
+DynamicArray<T>::DynamicArray(const DynamicArray& rhs) {
+	if (rhs.p_size != 0 && rhs.p_ptr != nullptr) {
+		p_ptr = new T[rhs.p_size];
+		p_size = rhs.p_size;
+		for (int i = 0; i < rhs.p_size;i++) {
+			p_ptr[i] = rhs.p_ptr[i];
+		}
+	}
+	else {
+		p_ptr = nullptr;
+		p_size = rhs.p_size;
+	}
+}
+template<typename T>
+DynamicArray<T>::~DynamicArray() {
+		delete[] p_ptr;
+		p_ptr = nullptr;
+		p_size = 0;
+}
+template <typename T>
+void DynamicArray<T>::append(const T& nVal) {
+	if (p_ptr != nullptr) {
+		T* n_ptr = nullptr;
+		n_ptr = new T[p_size + 1];
+		for (int i = 0; i < p_size;i++) {
+			n_ptr[i] = p_ptr[i];
+		}
+		n_ptr[p_size] = nVal;
+		delete[] p_ptr;
+		p_ptr = n_ptr;
+	}
+	else {
+		p_ptr = new T[1];
+		p_ptr[0] = nVal;
+	}
+	p_size++;
+	sort();
+}
+template <typename T>
+void DynamicArray<T>::insert(const T& nVal, const int& sIndex) {
+	if (sIndex < 0 || sIndex > p_size) {
+		throw OutOfRange("ERROR: INVALID INDEX ATTEMPTED.");
+	}
+	T* n_ptr = new T[p_size + 1];
+	for (int i = 0; i < sIndex; i++) {
+		n_ptr[i] = p_ptr[i];
+	}
+	n_ptr[sIndex] = nVal;
+	for (int i = sIndex; i < p_size; i++) {
+		n_ptr[i + 1] = p_ptr[i];
+	}
+	delete[] p_ptr;
+	p_ptr = n_ptr;
+	p_size++;
+	sort();
 }
 
-double Statistical::midRange()
-{
-    int size = dataset.size();
-    if (size == 0)
-        throw std::exception("\n\tException ERROR: Dataset is empty. \n");
+template <typename T>
+const T& DynamicArray<T>::retrieve(const int& sIndex) const {
+	if (sIndex < 0 || sIndex >= p_size) {
+		throw OutOfRange("ERROR: INVALID INDEX ATTEMPTED. ");
+	}
+	else
+		return p_ptr[sIndex];
+}
+template <typename T>
+void DynamicArray<T>::remove(const int& sIndex) {
+	if (sIndex < 0 || sIndex >= p_size) {
+		throw OutOfRange("ERROR: INVALID INDEX ATTEMPTED.");
+	}
 
-    double minVal = dataset.retrieve(0);
-    double maxVal = dataset.retrieve(0);
+	if (p_size == 1) { 
+		delete[] p_ptr;
+		p_ptr = nullptr;
+		p_size = 0;
+		return;
+	}
+	T* n_ptr = new T[p_size - 1];
+	int j = 0;
+	for (int i = 0; i < p_size; i++) {
+		if (i != sIndex) {
+			n_ptr[j++] = p_ptr[i];
+		}
+	}
 
-    for (int i = 1; i < size; ++i)
-    {
-        double val = dataset.retrieve(i);
-        if (val < minVal) minVal = val;
-        if (val > maxVal) maxVal = val;
-    }
-    return (minVal + maxVal) / 2.0;
+	delete[] p_ptr;
+	p_ptr = n_ptr;
+	p_size--;
 }
 
-double Statistical::quartiles()
-{
-    
-    int size = dataset.size();
-    double q1 = 0.0, q2 = 0.0, q3 = 0.0, iqr = 0.0;
-
-    if (size == 0) 
-        throw std::exception("\n\tERROR: Not enough values in dataset.\n");
-    else if (size == 1) {
-        throw std::exception("\n\tERROR: At least 2 values required to compute quartiles.\n");
-    }
-
-    double* sortedArr = new double[size];
-    for (int i = 0; i < size; ++i)
-        sortedArr[i] = dataset.retrieve(i);
-
-
-
-    
-    if (size == 2) {
-        q2 = median(sortedArr, 0, 1);
-        std::cout << "\n\tQ1 = empty";
-        std::cout << "\n\tQ2 = " << q2;
-        std::cout << "\n\tQ3 = empty";
-
-    }
-    else {
-        q1 = median(sortedArr, 0, (size - 1) / 2);
-        q2 = median(sortedArr, 0, size - 1);
-        q3 = median(sortedArr, (size + 1) / 2, size - 1);
-        iqr = q3 - q1;
-
-        std::cout << "\n\tQ1 = " << q1;
-        std::cout << "\n\tQ2 = " << q2;
-        std::cout << "\n\tQ3 = " << q3;
-        std::cout << "\n\t Interquartile = " << iqr;
-
-    }
-
-    delete[] sortedArr;
-    return iqr;
+template<typename T>
+bool DynamicArray<T>::exists(const T& needle) const{
+	if (p_size == 0) return false;
+	for (int i = 0; i < p_size;i++) {
+		if (needle == p_ptr[i])return true;
+	}
+	return false;
 }
 
-double Statistical::outliers()
-{
-    int size = dataset.size();
-    if (size < 4)
-        throw std::exception("\n\tException ERROR: Dataset must contain more values. \n");
-
-    double* sortedArr = new double[size];
-    for (int i = 0; i < size; ++i)
-        sortedArr[i] = dataset.retrieve(i);
-
-    double q1 = median(sortedArr, 0, (size - 1) / 2);
-    double q3 = median(sortedArr, (size + 1) / 2, size - 1);
-    double iqr = q3 - q1;
-
-    double lowerBound = q1 - 1.5 * iqr;
-    double upperBound = q3 + 1.5 * iqr;
-
-    int count = 0;
-    bool foundOutlier = false;
-    for (int i = 0; i < size; ++i)
-    {
-        double val = dataset.retrieve(i);
-        if (val < lowerBound || val > upperBound)
-        {
-            std::cout << val << " ";
-            foundOutlier = true;
-        }
-    }
-    if (!foundOutlier)
-        std::cout << "No outliers detected.";
-
-    std::cout << std::endl;
-    delete[] sortedArr;
-    return count;
+template <typename T>
+int DynamicArray<T>::size() const {
+	return p_size;
 }
-
-double Statistical::SumOfSquares()
-{
-    int size = dataset.size();
-    if (size == 0)
-        throw std::exception("\n\tException ERROR: INVALID DATASET SIZE. \n");
-
-    double mean = 0.0;
-    for (int i = 0; i < size; ++i)
-        mean += dataset.retrieve(i);
-
-    mean /= size;
-
-    double sumSquares = 0.0;
-    for (int i = 0; i < size; ++i)
-    {
-        double diff = dataset.retrieve(i) - mean;
-        sumSquares += diff * diff;
-    }
-
-    return sumSquares;
-}
-
-double Statistical::median(double arr[], int start, int end)
-{
-    int length = end - start + 1;
-    int mid = start + length / 2;
-
-    if (length % 2 == 0)
-        return (arr[mid - 1] + arr[mid]) / 2.0;
-    else
-        return arr[mid];
-}
-
-double Statistical::meanAbsoluteDeviation() {
-    int size = dataset.size();
-    if (size == 0) throw std::exception("\n\tEXCEPTION ERROR:  Dataset must contain more values. \n");
-
-    //using mean function
-
-    double m = Statistical::mean();
-
-
-    double sumAbsoluteDiff = 0.0;
-
-    for (int i = 0; i < size; ++i) {
-        sumAbsoluteDiff += std::fabs(dataset.retrieve(i) - m);
-    }
-
-    return sumAbsoluteDiff / size;
-}
-
-double Statistical::rootMeanSquare() {
-    int n = dataset.size();
-    if (n == 0) throw std::exception("\n\tException Error: Dataset must contain more values. \n");
-
-    double sumSquares = 0.0;
-    for (int i = 0; i < n; ++i) {
-        double val = dataset.retrieve(i);
-        sumSquares += val * val;
-    }
-
-    return std::sqrt(sumSquares / n);
+template <typename T>
+DynamicArray<T>& DynamicArray<T>::operator=(const DynamicArray& rhs) {
+	if (this != &rhs) {
+		delete[] p_ptr;
+		p_size = rhs.p_size;
+		p_ptr = new T[rhs.p_size];
+		for (int i = 0; i < p_size;i++) {
+			p_ptr[i] = rhs.p_ptr[i];
+		}
+	}
+		return *this;
+	
 }
 
 
-double Statistical::minimum()
-{
-    double minVal = dataset.retrieve(0);
 
-    return minVal;
+template<typename T>
+const T* DynamicArray<T>::data() const  {
+	return p_ptr;
 }
-
-
-double Statistical::maximum()
-{
-    if (dataset.size() == 0) {
-        throw std::exception("\n\tEXCEPTION ERROR: Dataset must contain more values. \n");
-   }
-
-   return dataset.retrieve(dataset.size() - 1);
-}
-
-double Statistical::range()
-{
-    if (dataset.size() == 0) {
-        throw std::exception("\n\tEXCEPTION ERROR: Dataset must contain more values. \n");
-    }
-
-    double minVal = dataset.retrieve(0);
-
-    double maxVal = dataset.retrieve(dataset.size() - 1);
-
-    double range = maxVal - minVal;
-
-    return range;
-
-}
-
-double Statistical::sum()
-{
-    if (dataset.size() == 0) {
-        throw std::exception("\n\tEXCEPTION ERROR: Dataset must contain more values. \n");
-    }
-
-    double sum = 0.0;
-
-    for (int i = 0; i < dataset.size(); i++)
-    {
-        sum += dataset.retrieve(i);
-    }
-
-    return sum;
-}
-
-
-double Statistical::median()
-{
-    if (dataset.size() == 0) {
-        throw std::exception("\n\tEXCEPTION ERROR: Dataset must contain more values. \n");
-    }
-
-    double median = 0.0;
-    median = dataset.retrieve(dataset.size() / 2);
-    if (dataset.size() % 2 == 0)
-    {
-        median = (median + dataset.retrieve(dataset.size() / 2 - 1)) / 2;
-    }
-
-    return median;
-}
-
-double* Statistical::mode(int& modeCount)
-{
-    if (dataset.size() == 0) {
-        throw std::exception("\n\tEXCEPTION ERROR: Dataset must contain more values. \n");
-    }
-
-    int maxCount = 1;
-    int currentCount = 1;
-
-    // First pass: find the highest frequency
-    for (int i = 1; i < dataset.size(); i++)
-    {
-        if (dataset.retrieve(i) == dataset.retrieve(i - 1))
-            currentCount++;
-        else
-            currentCount = 1;
-
-        if (currentCount > maxCount)
-            maxCount = currentCount;
-    }
-
-    // Second pass: count how many numbers appear maxCount times
-    currentCount = 1;
-    modeCount = 0;
-    for (int i = 1; i <= dataset.size(); i++)
-    {
-        if (i < dataset.size() && dataset.retrieve(i) == dataset.retrieve(i - 1))
-            currentCount++;
-        else
-        {
-            if (currentCount == maxCount)
-                modeCount++;
-
-            currentCount = 1;
-        }
-    }
-
-    // Allocate dynamic array to hold the modes
-    double* modes = new double[modeCount];
-
-    // Third pass: fill the array
-    currentCount = 1;
-    int index = 0;
-    for (int i = 1; i <= dataset.size(); i++)
-    {
-        if (i < dataset.size() && dataset.retrieve(i) == dataset.retrieve(i - 1))
-            currentCount++;
-        else
-        {
-            if (currentCount == maxCount)
-                modes[index++] = dataset.retrieve(i - 1);
-
-            currentCount = 1;
-        }
-    }
-
-    return modes; // caller must delete[]
-}
-
-
