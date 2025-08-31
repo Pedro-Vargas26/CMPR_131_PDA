@@ -1,32 +1,47 @@
-#pragma once
 #include "DynamicArray.h"
-#include <vector>
+#include "DynamicArray.cpp"
 
-class Statistical
-{
+#pragma once
+
+#ifndef STATSTICAL_H
+#define STATISTICAL_H
+class Statistical {
 private:
     DynamicArray<double> dataset;
-public:
-
-    Statistical(const DynamicArray<double>& dataset);
-    double mean() const;
-    double varianceIn();
-    double standarddeviation();
-    double midrangeIn();
-    double quartilesIn();
-    double outliers();
-    double thesumofsquares();
     double median(double arr[], int start, int end);
-    double meanabsolutedeviation();
-    double rootmeansquare();
 
-    double findMinimum();
-    double findMaximum();
-    double findRange();
-    double findSum();
-    double findMean();
-    double findMedian();
-    double* findMode(int& modeCount);
+public:
+    Statistical(const DynamicArray<double>& dataset);
+
+    /*Anthony's Portion*/
+    double minimum();
+    double maximum();
+    double range();
+    double sum();
+    double mean() const;
+    double median();
+    double* mode(int& modeCount);
+    void loadFromFile(const string& filename);
+
+    /*Daisy's Portion*/
+    double variance(bool sample = true) const;               // <-- new
+    double standardDeviation(bool sample = true) const;      // <-- new
+    double midRange();
+    double quartiles();
+    double outliers();
+    double SumOfSquares();
+    double meanAbsoluteDeviation();
+    double rootMeanSquare();
+
+    /*Pedro's Portion*/
+    double standardErrorOfMean(bool sample = true) const;    // <-- new
+    double skewness(bool sample = true) const;               // <-- adjust later
+    double kurtosis(bool sample = true) const;               // <-- adjust later
+    double kurtosisExcess(bool sample = true) const;
+    double coefficientVariation(bool sample = true) const;
+    double relativeStandardDeviation(bool sample = true) const;
+    //DynamicArray<pair<double, int>> frequencyTable()const;
 };
 
-// TO DO: bool validateDataSet(const DynamicArray<double>& data);
+
+#endif
