@@ -15,7 +15,7 @@ private:
 
 
 	void mergeSort(T genericArr[], const int& beginningIndex, const int& endingIndex);
-	void merge(T[], const int&, const int&, const int&);
+	void merge(T [], const int& , const int& , const int& );
 	void sort();
 
 	class OutOfRange : public exception {
@@ -23,7 +23,7 @@ private:
 		const char* msg;
 
 	public:
-		OutOfRange() : msg("ERROR: INVALID RANGE ENTERED. ") {}
+		OutOfRange() : msg("ERROR: INVALID RANGE ENTERED. "){}
 		OutOfRange(const char* nMsg) : msg(nMsg) {}
 		const char* what() noexcept {
 			return msg;
@@ -42,8 +42,10 @@ public:
 	bool exists(const T&) const;
 	int size()const;
 
+	bool erase(const T& needle, bool allOrOne);
 	DynamicArray& operator=(const DynamicArray&);
 
+	const T* data() const;
 	friend class Statistical;
 };
 
