@@ -214,21 +214,31 @@ int OptionTwo()
 
 }
 
-void readFromFile()
+void readFromFile() 
 {
-	Statistical stats(dataset);
-	string filename = inputString("\n\tSpecify a data text file name to read: ", false);
+	std::string filename;
+	std::cout << "\n\tEnter filename to read from: ";
+	std::cin >> filename;
 
-	try
-	{
-		//stats.loadFromFile(filename);
-	}
-	catch (const std::exception& e)
-	{
-		cerr << e.what();
+	std::ifstream inFile(filename);
+	if (!inFile) {
+		std::cerr << "\n\tERROR: Could not open file " << filename << std::endl;
+		system("pause");
+		return;
 	}
 
+	int value;
+	int count = 0;
+	while (inFile >> value) {
+		dataset.append(value);
+		count++;
+	}
+
+	inFile.close();
+	std::cout << "\n\tCONFIRMATION: Inserted " << count << " values from file into the Dataset.\n";
+	system("pause");
 }
+
 
 int OptionThree()
 
@@ -521,3 +531,4 @@ void TaskQ()
 
 
 }
+
