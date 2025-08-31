@@ -1,3 +1,4 @@
+
 #include "Statistical.h"
 #include "DynamicArray.h"
 
@@ -5,15 +6,37 @@
 #include <algorithm>
 #include <cmath> // for floor
 #include <vector>
+#include <fstream>
+#include <string>
 
 using namespace std;
 
 Statistical::Statistical(const DynamicArray<double>& data) : dataset(data) {}
 
+void Statistical::loadFromFile(const string& filename)
+{
+    ifstream inFile(filename);
+
+    if (!inFile)
+    {
+        throw std::runtime_error("Exception ERROR: Could not open file " + filename);
+    }
+
+    double value;
+
+    while (inFile >> value)
+    {
+        dataset.append(value);
+    }
+
+    inFile.close();
+
+}
+
 double Statistical::mean() const
 {
     int size = dataset.size();
-    if (size == 0) return 0.0;
+    if (size == 0) throw std::exception("Exception ERROR: Dataset is empty. ");
 
     double sum = 0.0;
     for (int i = 0; i < size; ++i)
@@ -22,55 +45,41 @@ double Statistical::mean() const
     return sum / size;
 }
 
-double Statistical::standarddeviation()
+double Statistical::variance(bool sample) const
 {
-    //standarddeviation : mean --
     int n = dataset.size();
+    if (n == 0)
+        throw std::exception("\n\tEXCEPTION ERROR: Dataset is empty.\n");
+    if (sample && n < 2)
+        throw std::exception("\n\tEXCEPTION ERROR: Sample variance requires at least 2 values.\n");
 
-    if (n <= 1) {
-        std::cout << "\n\tERROR: data set requires at least 2 values.\n";
-        return 0.0;
-    }
-
-    double m = Statistical::mean();
-
-
-
+    double m = mean();
     double totalSquaredDiff = 0.0;
+
     for (int i = 0; i < n; ++i) {
         double diff = dataset.retrieve(i) - m;
         totalSquaredDiff += diff * diff;
     }
 
-    return std::sqrt(totalSquaredDiff / (n - 1));  // Sample std dev denominator is n-1
+    return sample ? (totalSquaredDiff / (n - 1))
+        : (totalSquaredDiff / n);
 }
 
-double Statistical::varianceIn()
+double Statistical::standardDeviation(bool sample) const
 {
-    int size = dataset.size();
-    if (size < 2)
-        return 0.0;
-
-    double sum = 0.0;
-    for (int i = 0; i < size; ++i)
-        sum += dataset.retrieve(i);
-
-    double mean = sum / size;
-
-    double variance = 0.0;
-    for (int i = 0; i < size; ++i)
-    {
-        double diff = dataset.retrieve(i) - mean;
-        variance += diff * diff;
+    if (dataset.size() == 0) {
+        throw std::exception("\n\tEXCEPTION ERROR: Dataset must contain more values. \n");
     }
-    return variance / (size - 1);
+
+    return std::sqrt(variance(sample));
 }
 
-double Statistical::midrangeIn()
+
+double Statistical::midRange()
 {
     int size = dataset.size();
     if (size == 0)
-        return 0.0;
+        throw std::exception("\n\tException ERROR: Dataset is empty. \n");
 
     double minVal = dataset.retrieve(0);
     double maxVal = dataset.retrieve(0);
@@ -84,27 +93,22 @@ double Statistical::midrangeIn()
     return (minVal + maxVal) / 2.0;
 }
 
-double Statistical::quartilesIn()
+double Statistical::quartiles()
 {
     int size = dataset.size();
-    double q1, q2, q3, iqr;
+    double q1 = 0.0, q2 = 0.0, q3 = 0.0, iqr = 0.0;
 
-    if (size == 0) {
-        std::cout << "\n\tERROR: Not enough values in dataset.\n";
-        return 0.0;
+    if (size == 0)
+        throw std::exception("\n\tERROR: Not enough values in dataset.\n");
+    else if (size == 1) {
+        throw std::exception("\n\tERROR: At least 2 values required to compute quartiles.\n");
     }
 
     double* sortedArr = new double[size];
     for (int i = 0; i < size; ++i)
         sortedArr[i] = dataset.retrieve(i);
 
-
-
-    if (size == 1) {
-        std::cout << "\n\tERROR: At least 2 values required to compute quartiles.\n";
-
-    }
-    else if (size == 2) {
+    if (size == 2) {
         q2 = median(sortedArr, 0, 1);
         std::cout << "\n\tQ1 = empty";
         std::cout << "\n\tQ2 = " << q2;
@@ -121,7 +125,6 @@ double Statistical::quartilesIn()
         std::cout << "\n\tQ2 = " << q2;
         std::cout << "\n\tQ3 = " << q3;
         std::cout << "\n\t Interquartile = " << iqr;
-
     }
 
     delete[] sortedArr;
@@ -132,7 +135,7 @@ double Statistical::outliers()
 {
     int size = dataset.size();
     if (size < 4)
-        return 0;
+        throw std::exception("\n\tException ERROR: Dataset must contain more values. \n");
 
     double* sortedArr = new double[size];
     for (int i = 0; i < size; ++i)
@@ -164,11 +167,11 @@ double Statistical::outliers()
     return count;
 }
 
-double Statistical::thesumofsquares()
+double Statistical::SumOfSquares()
 {
     int size = dataset.size();
     if (size == 0)
-        return 0.0;
+        throw std::exception("\n\tException ERROR: INVALID DATASET SIZE. \n");
 
     double mean = 0.0;
     for (int i = 0; i < size; ++i)
@@ -197,17 +200,13 @@ double Statistical::median(double arr[], int start, int end)
         return arr[mid];
 }
 
-double Statistical::meanabsolutedeviation() {
+double Statistical::meanAbsoluteDeviation() {
     int size = dataset.size();
-    if (size == 0) return 0.0;
-
-    //using mean function
+    if (size == 0) throw std::exception("\n\tEXCEPTION ERROR:  Dataset must contain more values. \n");
 
     double m = Statistical::mean();
 
-
     double sumAbsoluteDiff = 0.0;
-
     for (int i = 0; i < size; ++i) {
         sumAbsoluteDiff += std::fabs(dataset.retrieve(i) - m);
     }
@@ -215,11 +214,9 @@ double Statistical::meanabsolutedeviation() {
     return sumAbsoluteDiff / size;
 }
 
-double Statistical::rootmeansquare() {
+double Statistical::rootMeanSquare() {
     int n = dataset.size();
-    if (n == 0) {
-        return 0.0;
-    }
+    if (n == 0) throw std::exception("\n\tException Error: Dataset must contain more values. \n");
 
     double sumSquares = 0.0;
     for (int i = 0; i < n; ++i) {
@@ -230,38 +227,44 @@ double Statistical::rootmeansquare() {
     return std::sqrt(sumSquares / n);
 }
 
-
-double Statistical::findMinimum()
+double Statistical::minimum()
 {
+
+    if (dataset.size() == 0)
+    {
+        throw std::exception("\n\tEXCEPTION ERROR: Dataset must contain more values. \n");
+    }
+
+    return dataset.retrieve(0);
+}
+
+double Statistical::maximum()
+{
+    if (dataset.size() == 0)
+    {
+        throw std::exception("\n\tEXCEPTION ERROR: Dataset must contain more values. \n");
+    }
+    return dataset.retrieve(dataset.size() - 1);
+}
+
+double Statistical::range()
+{
+    if (dataset.size() == 0) {
+        throw std::exception("\n\tEXCEPTION ERROR: Dataset must contain more values. \n");
+    }
+
     double minVal = dataset.retrieve(0);
-
-    return minVal;
-}
-
-
-double Statistical::findMaximum()
-{
     double maxVal = dataset.retrieve(dataset.size() - 1);
-
-    return maxVal;
+    return maxVal - minVal;
 }
 
-double Statistical::findRange()
+double Statistical::sum()
 {
-    double minVal = dataset.retrieve(0);
+    if (dataset.size() == 0) {
+        throw std::exception("\n\tEXCEPTION ERROR: Dataset must contain more values. \n");
+    }
 
-    double maxVal = dataset.retrieve(dataset.size() - 1);
-
-    double range = maxVal - minVal;
-
-    return range;
-    
-}
-
-double Statistical::findSum()
-{
-    int sum = 0;
-
+    double sum = 0.0;
     for (int i = 0; i < dataset.size(); i++)
     {
         sum += dataset.retrieve(i);
@@ -270,20 +273,12 @@ double Statistical::findSum()
     return sum;
 }
 
-double Statistical::findMean()
+double Statistical::median()
 {
-    double sum = 0.0;
-    double mean = 0.0;
-    for (int i = 0; i < dataset.size(); i++)
-    {
-        sum += dataset.retrieve(i); 
+    if (dataset.size() == 0) {
+        throw std::exception("\n\tEXCEPTION ERROR: Dataset must contain more values. \n");
     }
 
-    return mean = sum/dataset.size();
-}
-
-double Statistical::findMedian()
-{
     double median = 0.0;
     median = dataset.retrieve(dataset.size() / 2);
     if (dataset.size() % 2 == 0)
@@ -294,8 +289,12 @@ double Statistical::findMedian()
     return median;
 }
 
-double* Statistical::findMode(int& modeCount)
+double* Statistical::mode(int& modeCount)
 {
+    if (dataset.size() == 0) {
+        throw std::exception("\n\tEXCEPTION ERROR: Dataset must contain more values. \n");
+    }
+
     int maxCount = 1;
     int currentCount = 1;
 
@@ -348,6 +347,74 @@ double* Statistical::findMode(int& modeCount)
 
     return modes; // caller must delete[]
 }
+double Statistical::standardErrorOfMean(bool sample) const {
+    double p_standard_Dev = standardDeviation(sample);
+    int p_size = dataset.size();
+    if (p_size == 0) throw std::exception("ERROR: EMPTY DATASET");
+    return p_standard_Dev / sqrt(p_size);
+}
 
+double Statistical::skewness(bool sample) const {
+    int p_size = dataset.size();
+    if (p_size < 2) throw std::exception("ERROR: INVALID DATASET SIZE");
 
+    double p_mean = mean();
+    double p_standard_Dev = standardDeviation(sample);
+    if (p_standard_Dev == 0.0) return 0.0;
 
+    double sum = 0.0;
+    for (int i = 0; i < p_size; i++) {
+        sum += pow((dataset.retrieve(i) - p_mean) / p_standard_Dev, 3);
+    }
+
+    if (sample) {
+        if (p_size < 3) throw std::exception("ERROR: NEED AT LEAST 3 ENTRIES FOR SKEWNESS");
+        return (static_cast<double>(p_size) / ((p_size - 1) * (p_size - 2))) * sum;
+    }
+    else {
+        // Population skewness
+        return sum / p_size;
+    }
+}
+
+double Statistical::kurtosis(bool sample) const {
+    int p_size = dataset.size();
+    if (p_size < 2) throw std::exception("ERROR: INVALID DATASET SIZE");
+
+    double p_mean = mean();
+    double p_standard_Dev = standardDeviation(sample);
+    if (p_standard_Dev == 0.0) return 0.0;
+
+    double sum = 0.0;
+    for (int i = 0; i < p_size; i++) {
+        sum += pow((dataset.retrieve(i) - p_mean) / p_standard_Dev, 4);
+    }
+
+    if (sample) {
+        if (p_size < 4) throw std::exception("ERROR: 4 ENTRIES IN DATASET REQUIRED. ");
+        double numerator = (p_size * (p_size + 1)) * sum;
+        double denominator = (p_size - 1) * (p_size - 2) * (p_size - 3);
+        double offset = (3.0 * (p_size - 1) * (p_size - 1)) / ((p_size - 2) * (p_size - 3));
+        return (numerator / denominator) - offset;
+    }
+    else {
+        // Population kurtosis
+        return sum / p_size;
+    }
+}
+
+double Statistical::kurtosisExcess(bool sample) const {
+    return kurtosis(sample) - 3.0;
+}
+
+double Statistical::coefficientVariation(bool sample) const {
+    double p_mean = mean();
+    if (p_mean == 0.0) throw std::exception("ERROR: INVALID DATA PRESENTED. ");
+    return standardDeviation(sample) / p_mean;
+}
+
+double Statistical::relativeStandardDeviation(bool sample) const {
+    double p_mean = mean();
+    if (p_mean == 0.0) throw std::exception("ERROR: INVALID DATA PRESENTED. ");
+    return (standardDeviation(sample) / p_mean) * 100.0;
+}
