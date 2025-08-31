@@ -1,37 +1,17 @@
-
 #include "Statistical.h"
 #include "DynamicArray.h"
 
 #include <iostream>
 #include <algorithm>
+#include <iomanip>
+#include <unordered_map>
+
 #include <cmath> // for floor
 #include <vector>
-#include <fstream>
-#include <string>
 
 using namespace std;
 
-Statistical::Statistical(const DynamicArray<double>& data) : dataset(data) {}
-
-void Statistical::loadFromFile(const string& filename)
-{
-    ifstream inFile(filename);
-
-    if (!inFile)
-    {
-        throw std::runtime_error("Exception ERROR: Could not open file " + filename);
-    }
-
-    double value;
-
-    while (inFile >> value)
-    {
-        dataset.append(value);
-    }
-
-    inFile.close();
-
-}
+Statistical::Statistical(const DynamicArray<int>& data) : dataset(data) {}
 
 double Statistical::mean() const
 {
@@ -67,10 +47,6 @@ double Statistical::variance(bool sample) const
 
 double Statistical::standardDeviation(bool sample) const
 {
-    if (dataset.size() == 0) {
-        throw std::exception("\n\tEXCEPTION ERROR: Dataset must contain more values. \n");
-    }
-
     return std::sqrt(variance(sample));
 }
 
@@ -96,7 +72,7 @@ double Statistical::midRange()
 double Statistical::quartiles()
 {
     int size = dataset.size();
-    double q1 = 0.0, q2 = 0.0, q3 = 0.0, iqr = 0.0;
+    double q1 = 0, q2 = 0, q3 = 0, iqr = 0;
 
     if (size == 0)
         throw std::exception("\n\tERROR: Not enough values in dataset.\n");
@@ -104,7 +80,7 @@ double Statistical::quartiles()
         throw std::exception("\n\tERROR: At least 2 values required to compute quartiles.\n");
     }
 
-    double* sortedArr = new double[size];
+    int* sortedArr = new int[size];
     for (int i = 0; i < size; ++i)
         sortedArr[i] = dataset.retrieve(i);
 
@@ -137,7 +113,7 @@ double Statistical::outliers()
     if (size < 4)
         throw std::exception("\n\tException ERROR: Dataset must contain more values. \n");
 
-    double* sortedArr = new double[size];
+    int* sortedArr = new int[size];
     for (int i = 0; i < size; ++i)
         sortedArr[i] = dataset.retrieve(i);
 
@@ -160,7 +136,7 @@ double Statistical::outliers()
         }
     }
     if (!foundOutlier)
-        std::cout << "No outliers detected.";
+        std::cout << setw(30) << "\tNo outliers detected.";
 
     std::cout << std::endl;
     delete[] sortedArr;
@@ -189,7 +165,7 @@ double Statistical::SumOfSquares()
     return sumSquares;
 }
 
-double Statistical::median(double arr[], int start, int end)
+double Statistical::median(int arr[], int start, int end)
 {
     int length = end - start + 1;
     int mid = start + length / 2;
@@ -229,19 +205,13 @@ double Statistical::rootMeanSquare() {
 
 double Statistical::minimum()
 {
-
-    if (dataset.size() == 0)
-    {
-        throw std::exception("\n\tEXCEPTION ERROR: Dataset must contain more values. \n");
-    }
-
-    return dataset.retrieve(0);
+    double minVal = dataset.retrieve(0);
+    return minVal;
 }
 
 double Statistical::maximum()
 {
-    if (dataset.size() == 0)
-    {
+    if (dataset.size() == 0) {
         throw std::exception("\n\tEXCEPTION ERROR: Dataset must contain more values. \n");
     }
     return dataset.retrieve(dataset.size() - 1);
@@ -417,4 +387,12 @@ double Statistical::relativeStandardDeviation(bool sample) const {
     double p_mean = mean();
     if (p_mean == 0.0) throw std::exception("ERROR: INVALID DATA PRESENTED. ");
     return (standardDeviation(sample) / p_mean) * 100.0;
+}
+
+unordered_map<int, int> Statistical::getFrequency() {
+    unordered_map<int, int> freq;
+    for (int i = 0; i < dataset.size();i++) {
+        freq[dataset.retrieve(i)]++;
+    }
+    return freq;
 }
