@@ -1,19 +1,19 @@
 #include <iostream>
 #include <iomanip>
 #include <cstdlib>
-#include <fstream>
 #include "input.h"
+#include <unordered_map>
+#include <fstream>
 #include "DynamicArray.h"
 #include "Statistical.h"
 
 using namespace std;
-DynamicArray<double> dataset;
+DynamicArray<int> dataset;
 
 char menuOption();
-int OptionOne();
-int OptionTwo();
-int OptionThree();
-
+void OptionOne();
+void OptionTwo();
+void OptionThree();
 void readFromFile();
 
 void TaskA();
@@ -33,14 +33,21 @@ void TaskN();
 void TaskO();
 void TaskP();
 void TaskQ();
-
+void TaskR();
+void TaskS();
+void TaskT();
+void TaskU();
+void TaskV();
+void TaskW();
+void TaskX();
+void TaskY(); 
+void TaskZ();
 int main()
 {
 
 	cout << "\n\tWhat are Descriptive Statistics?";
 	cout << "\n\n\tDescriptive statistics summarize certain aspects of a data set (Sample or Population) using numeric calculations.";
 	cout << "\n\thttps://www.calculatorsoup.com/calculators/statistics/descriptivestatistics.php.";
-	cout << "\n\n\tPress any key to continue...";
 
 	system("pause");
 	system("cls");
@@ -52,7 +59,7 @@ int main()
 		case '0': exit(0); break;
 		case '1': OptionOne(); break;
 		case '2': OptionTwo(); break;
-			//case 3: Task3(); break;
+		case '3': OptionThree(); break;
 
 		case 'A': TaskA(); break;
 		case 'B': TaskB(); break;
@@ -71,15 +78,15 @@ int main()
 		case 'O': TaskO(); break;
 		case 'P': TaskP(); break;
 		case 'Q': TaskQ(); break;
-			// case 'R': TaskR(); break;
-			// case 'S': TaskS(); break;
-			// case 'T': TaskT(); break;
-			// case 'U': TaskU(); break;
-			// case 'V': TaskV(); break;
-			// case 'W': TaskW(); break;
-			// case 'X': TaskX(); break;
-			// case 'Y': TaskY(); break;
-			// case 'Z': TaskZ(); break;
+			 case 'R': TaskR(); break;
+			 case 'S': TaskS(); break;
+			 case 'T': TaskT(); break;
+			 case 'U': TaskU(); break;
+			 case 'V': TaskV(); break;
+			 case 'W': TaskW(); break;
+			 case 'X': TaskX(); break;
+			 case 'Y': TaskY(); break;
+			 case 'Z': TaskZ(); break;
 		default: cout << "\t\tERROR - Invalid option. Please re-enter."; break;
 		}
 		cout << "\n";
@@ -106,11 +113,10 @@ char menuOption()
 			cout << dataset.retrieve(i) << " ";
 		}
 	}
-	cout << "\n\n\tERROR: Data set requires at least 2 values.";
 	cout << "\n\tDescriptive Statistics Calculator Main Menu";
 	cout << "\n\t================================================================================";
 	cout << "\n\t0.Exit";
-	cout << "\n\t1. Configure Dataset to Sample or Polulation";
+	cout << "\n\t1. Configure Dataset to Sample or Population";
 	cout << "\n\t2. Insert sort value(s) to the Dataset";
 	cout << "\n\t3. Delete value(s) from the Dataset";
 	cout << "\n\t----------------------------------------------------------------------------------";
@@ -133,7 +139,7 @@ char menuOption()
 
 }
 
-int OptionOne()
+void OptionOne()
 
 {
 	system("cls");
@@ -149,12 +155,11 @@ int OptionOne()
 	cout << "\n\tR. Return";
 	cout << "\n\t ============================================================";
 
-	return 0;
+	return;
 }
 
 
-
-int OptionTwo()
+void OptionTwo()
 
 {
 	while (true)
@@ -177,7 +182,7 @@ int OptionTwo()
 		{
 
 		case 'r':
-			return 1; // Return to main menu
+			return; // Return to main menu
 
 		case 'a':
 		{
@@ -203,7 +208,7 @@ int OptionTwo()
 			system("pause");
 
 		}
-			break;
+		break;
 		case 'c': readFromFile(); break;
 
 		default:
@@ -214,7 +219,7 @@ int OptionTwo()
 
 }
 
-void readFromFile() 
+void readFromFile()
 {
 	std::string filename;
 	std::cout << "\n\tEnter filename to read from: ";
@@ -240,9 +245,15 @@ void readFromFile()
 }
 
 
-int OptionThree()
-
+void OptionThree()
 {
+	int f_value = 0;
+	char i_choice = 'A';
+	bool oneOrAll = false;
+	char choice = 'A';
+	int starting_index = 0;
+	int ending_index = 0;
+
 	system("cls");
 	cout << "\n\tDelete Dataset Menu";
 	cout << "\n\tA. delete a value";
@@ -251,8 +262,46 @@ int OptionThree()
 	cout << "\n\t ============================================================";
 	cout << "\n\tR. Return";
 	cout << "\n\t ============================================================";
+	choice = inputChar("\tOption:","ABCR");
 
-	return 0;
+	switch (choice) {
+	case 'A':
+		
+		f_value = inputInteger("\n\tSpecify an integer value to find and be deleted from the Dataset:", true);
+
+		i_choice = inputChar("Delete *-all elements or 1-one element found with value 1?", "1*");
+		if (i_choice == '*') { oneOrAll = true; }
+		else { oneOrAll = false; };
+
+		dataset.erase(f_value, oneOrAll);
+		break;
+	case 'B':
+		
+
+		starting_index = inputInteger("\n\tSpecify a starting integer value to be deleted from the dataset: ", 0, dataset.size()-1);
+		ending_index = inputInteger("\n\tSpecify an ending integer value to be deleted from the Dataset: ", 0, dataset.size()-1);
+		cout << "\n";
+		for (int i = starting_index; i <= ending_index;i++)
+			dataset.remove(i);
+
+		cout << "CONFIRMATION: ELEMENT(s): " << ((ending_index - starting_index) + 1) << "have been deleted. " << endl;
+
+		system("pause");
+
+		break;
+	case 'C':
+
+		for (int i = 0; i < dataset.size();i++)
+			dataset.remove(i);
+
+		cout << "\n\tDataset has been purged of all elements. " << endl;
+		system("pause");
+
+		break;
+	case 'R':
+		return;
+	}
+
 }
 
 
@@ -283,7 +332,7 @@ void TaskB()
 	}
 	catch (const std::exception& e)
 	{
-		cerr << e.what(); 
+		cerr << e.what();
 	}
 
 }
@@ -299,7 +348,7 @@ void TaskC()
 	}
 	catch (const std::exception& e)
 	{
-		cerr << e.what(); 
+		cerr << e.what();
 	}
 
 }
@@ -310,7 +359,7 @@ void TaskD()
 
 	double Size = dataset.size();
 	cout << "\n\tSize = " << Size;
-	
+
 
 }
 
@@ -402,133 +451,261 @@ void TaskI()
 
 }
 
+void TaskI()
+{
+
+	Statistical stats(dataset);
+	double stddev = stats.standardDeviation();
+	std::cout << "Sample standard deviation =  " << stddev;
+
+}
+
 void TaskJ()
 {
 	Statistical stats(dataset);
-
-	try
-	{
-		double vrnce = stats.variance();
-		cout << "Variance =  " << vrnce;
-	}
-	catch (const std::exception& e)
-	{
-		cerr << e.what();
-	}
+	double vrnce = stats.variance();
+	std::cout << "Variance =  " << vrnce;
 
 
 }
 void TaskK()
 {
 	Statistical stats(dataset);
+	double mdrnge = stats.midRange();
+	std::cout << "Midrange =  " << mdrnge;
 
-	try
-	{
-		double mdrnge = stats.midRange(); 
-		cout << "Midrange =  " << mdrnge; 
-	}
-	catch (const std::exception& e)
-	{
-		cerr << e.what();
-	}
 
 }
 
 void TaskL()
 {
 	Statistical stats(dataset);
+	double iqr = stats.quartiles();
 
-	try
-	{
-		double iqr = stats.quartiles();
-	}
-	catch (const std::exception& e)
-	{
-		cerr << e.what();
-	}
-	
 }
 
 void TaskM()
 {
 	//needs to only reurn IQR
 	Statistical stats(dataset);
-
-	try
-	{
-		double iqr = stats.quartiles();
-	}
-	catch (const std::exception& e)
-	{
-		cerr << e.what();
-	}
+	double iqr = stats.quartiles();
 
 }
 
 void TaskN()
 {
 	Statistical stats(dataset);
-
-	try
-	{
-		double out = stats.outliers();
-		cout << "Outliers =  " << out;
-	}
-	catch (const std::exception& e)
-	{
-		cerr << e.what();
-	}
-
+	double out = stats.outliers();
+	std::cout << "Outliers =  " << out;
 
 }
 
 void TaskO()
 {
 	Statistical stats(dataset);
-
-	try
-	{
-		double sumsquares = stats.SumOfSquares();
-		cout << "Sum of Squares = " << sumsquares;
-	}
-	catch (const std::exception& e)
-	{
-		cerr << e.what();
-	}
+	double sumsquares = stats.SumOfSquares();
+	std::cout << "Sum of Squares = " << sumsquares;
 
 }
 
 void TaskP()
 {
 	Statistical stats(dataset);
-
-	try
-	{
-		double mnabsdeviation = stats.meanAbsoluteDeviation();
-		cout << "Mean Absolute Deviation = " << mnabsdeviation;
-	}
-	catch (const std::exception& e)
-	{
-		cerr << e.what();
-	}
-
+	double mnabsdeviation = stats.meanAbsoluteDeviation();
+	std::cout << "Mean Absolute Deviation = " << mnabsdeviation;
 
 }
 
 void TaskQ()
 {
 	Statistical stats(dataset);
-
-	try
-	{
-		double rtmeansquare = stats.rootMeanSquare();
-		std::cout << "Root Mean Square = " << rtmeansquare;
-	}
-	catch (const std::exception& e)
-	{
-		cerr << e.what();
-	}
-
+	double rtmeansquare = stats.rootMeanSquare();
+	std::cout << "Root Mean Square = " << rtmeansquare;
 
 }
 
+
+void TaskR() {
+	try {
+		Statistical stats(dataset);
+		cout << "\n\n" << "Standard Error Of the Mean: " << stats.standardErrorOfMean() << "\n\n";
+	}
+	catch (const exception& e) {
+		cout << e.what() << "\n\n";
+	}
+}
+void TaskS() {
+	try {
+		Statistical stats(dataset);
+		cout << "\n\n\t" << "Skewness: \t" << stats.skewness() << "\n\n";
+	}
+	catch (const exception& e) {
+		cout << e.what() << "\n\n";
+	}
+}
+void TaskT() {
+	try {
+		Statistical stats(dataset);
+		cout << "\n\n\t" << "Kurtosis:\t" << stats.kurtosis() << "\n\n";
+	}
+	catch (const exception& e) {
+		cout << e.what() << "\n\n";
+	}
+}
+void TaskU() {
+	try {
+		Statistical stats(dataset);
+		cout << "\n\n\t" << "Kurtosis Excess:\t" << stats.kurtosisExcess() << "\n\n";
+	}
+	catch (const exception& e) {
+		cout << e.what() << "\n\n";
+	}
+}
+void TaskV() {
+	try {
+		Statistical stats(dataset);
+		cout << "\n\n\t" << "Coefficient of Variation:\t" << stats.coefficientVariation() << "\n\n";
+	}
+	catch (const exception& e) {
+		cout << e.what() << "\n\n";
+	}
+}
+void TaskW() {
+	try {
+		Statistical stats(dataset);
+		cout << "\n\n\t" << "Relative Standard Deviation:\t" << stats.relativeStandardDeviation() << "\n\n";
+	}
+	catch (const exception& e) {
+		cout << e.what() << "\n\n";
+	}
+}
+void TaskX() {
+	if (dataset.size() == 0) {
+		cerr << "\n\tERROR: EMPTY DATASET ENTERED. " << endl;
+	}
+	else {
+		Statistical stats(dataset);
+
+		unordered_map<int, int> frequency_table = stats.getFrequency();
+
+		// Loop through and print
+		for (const std::pair<const int, int>& display : frequency_table) {
+			cout << "\n\tValue: " << display.first
+				<< " -> Frequency: " << display.second << '\n';
+		}
+	}
+}
+
+void TaskY() {
+
+	bool populationOrSample = true; // placeholder (true = sample, false = population)
+
+	Statistical stats(dataset);
+
+	const int labelWidth = 30;
+
+	cout << left; 
+	cout << setw(labelWidth) << "\tMinimum:" << stats.minimum() << endl;
+	cout << setw(labelWidth) << "\tMaximum:" << stats.maximum() << endl;
+	cout << setw(labelWidth) << "\tRange:" << stats.range() << endl;
+	cout << setw(labelWidth) << "\tSum:" << stats.sum() << endl;
+	cout << setw(labelWidth) << "\tMean:" << stats.mean() << endl;
+	cout << setw(labelWidth) << "\tMedian:" << stats.median() << endl;
+
+	int modeCount = 0;
+	double* modes = stats.mode(modeCount);
+	cout << setw(labelWidth) << "\tMode(s):";
+	for (int i = 0; i < modeCount; i++) {
+		cout << modes[i] << " ";
+	}
+	cout << endl;
+	delete[] modes;
+
+	cout << setw(labelWidth) << "\tVariance:" << stats.variance(populationOrSample) << endl;
+	cout << setw(labelWidth) << "\tStandard Deviation:" << stats.standardDeviation(populationOrSample) << endl;
+	cout << setw(labelWidth) << "\tMid-Range:" << stats.midRange() << endl;
+	cout << setw(labelWidth) << "\tQuartiles:" << stats.quartiles() << endl;
+	cout << setw(labelWidth) << "\tOutliers:" << stats.outliers() << endl;
+	cout << setw(labelWidth) << "\tSum of Squares:" << stats.SumOfSquares() << endl;
+	cout << setw(labelWidth) << "\tMean Abs Deviation:" << stats.meanAbsoluteDeviation() << endl;
+	cout << setw(labelWidth) << "\tRoot Mean Square:" << stats.rootMeanSquare() << endl;
+
+	cout << setw(labelWidth) << "\tStd Error of Mean:" << stats.standardErrorOfMean(populationOrSample) << endl;
+	cout << setw(labelWidth) << "\tSkewness:" << stats.skewness(populationOrSample) << endl;
+	cout << setw(labelWidth) << "\tKurtosis:" << stats.kurtosis(populationOrSample) << endl;
+	cout << setw(labelWidth) << "\tKurtosis Excess:" << stats.kurtosisExcess(populationOrSample) << endl;
+	cout << setw(labelWidth) << "\tCoeff. Variation:" << stats.coefficientVariation(populationOrSample) << endl;
+	cout << setw(labelWidth) << "\tRel. Std Deviation:" << stats.relativeStandardDeviation(populationOrSample) << endl;
+
+	unordered_map<int, int> freqTable = stats.getFrequency();
+	cout << "\n\tFrequencies:\n";
+	for (const pair<const int, int>& kv : freqTable) {
+		cout << setw(labelWidth) << ("\tValue: " + to_string(kv.first))
+			<< kv.second << endl;
+	}
+}
+
+void TaskZ() {
+	string filename;
+	bool populationOrSample = false;
+	Statistical stats(dataset);
+
+	const int labelWidth = 30;
+
+	filename = inputString("\n\tEnter the filename to save results: ", false);
+
+	ofstream outFile(filename);
+	if (!outFile) {
+		cerr << "Error: could not open file " << filename << endl;
+		return;
+	}
+
+	const int labelWidth = 30;
+	outFile << left;
+
+	// Anthony's Portion
+	outFile << setw(labelWidth) << "\tMinimum:" << stats.minimum() << endl;
+	outFile << setw(labelWidth) << "\tMaximum:" << stats.maximum() << endl;
+	outFile << setw(labelWidth) << "\tRange:" << stats.range() << endl;
+	outFile << setw(labelWidth) << "\tSum:" << stats.sum() << endl;
+	outFile << setw(labelWidth) << "\tMean:" << stats.mean() << endl;
+	outFile << setw(labelWidth) << "\tMedian:" << stats.median() << endl;
+
+	int modeCount = 0;
+	double* modes = stats.mode(modeCount);
+	outFile << setw(labelWidth) << "\tMode(s):";
+	for (int i = 0; i < modeCount; i++) {
+		outFile << modes[i] << " ";
+	}
+	outFile << endl;
+	delete[] modes;
+
+	// Daisy's Portion
+	outFile << setw(labelWidth) << "\tVariance:" << stats.variance(populationOrSample) << endl;
+	outFile << setw(labelWidth) << "\tStandard Deviation:" << stats.standardDeviation(populationOrSample) << endl;
+	outFile << setw(labelWidth) << "\tMid-Range:" << stats.midRange() << endl;
+	outFile << setw(labelWidth) << "\tQuartiles:" << stats.quartiles() << endl;
+	outFile << setw(labelWidth) << "\tOutliers:" << stats.outliers() << endl;
+	outFile << setw(labelWidth) << "\tSum of Squares:" << stats.SumOfSquares() << endl;
+	outFile << setw(labelWidth) << "\tMean Abs Deviation:" << stats.meanAbsoluteDeviation() << endl;
+	outFile << setw(labelWidth) << "\tRoot Mean Square:" << stats.rootMeanSquare() << endl;
+
+	// Pedro's Portion
+	outFile << setw(labelWidth) << "\tStd Error of Mean:" << stats.standardErrorOfMean(populationOrSample) << endl;
+	outFile << setw(labelWidth) << "\tSkewness:" << stats.skewness(populationOrSample) << endl;
+	outFile << setw(labelWidth) << "\tKurtosis:" << stats.kurtosis(populationOrSample) << endl;
+	outFile << setw(labelWidth) << "\tKurtosis Excess:" << stats.kurtosisExcess(populationOrSample) << endl;
+	outFile << setw(labelWidth) << "\tCoeff. Variation:" << stats.coefficientVariation(populationOrSample) << endl;
+	outFile << setw(labelWidth) << "\tRel. Std Deviation:" << stats.relativeStandardDeviation(populationOrSample) << endl;
+
+	// Frequency Table
+	unordered_map<int, int> freqTable = stats.getFrequency();
+	outFile << "\n\tFrequencies:\n";
+	for (const pair<const int, int>& kv : freqTable) {
+		outFile << setw(labelWidth) << ("\tValue: " + to_string(kv.first))
+			<< kv.second << endl;
+	}
+
+	outFile.close();
+	cout << "Statistics saved to " << filename << endl;
+}
