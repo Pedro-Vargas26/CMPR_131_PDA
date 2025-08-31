@@ -7,11 +7,11 @@
 #define STATISTICAL_H
 class Statistical {
 private:
-    DynamicArray<double> dataset;
-    double median(double arr[], int start, int end);
+    DynamicArray<int> dataset;
+    double median(int arr[], int start, int end);
 
 public:
-    Statistical(const DynamicArray<double>& dataset);
+    Statistical(const DynamicArray<int>& dataset);
 
     /*Anthony's Portion*/
     double minimum();
@@ -23,8 +23,8 @@ public:
     double* mode(int& modeCount);
 
     /*Daisy's Portion*/
-    double variance(bool sample = true) const;               // <-- new
-    double standardDeviation(bool sample = true) const;      // <-- new
+    double variance(bool sample = true) const;    
+    double standardDeviation(bool sample = true) const;  
     double midRange();
     double quartiles();
     double outliers();
@@ -33,13 +33,14 @@ public:
     double rootMeanSquare();
 
     /*Pedro's Portion*/
-    double standardErrorOfMean(bool sample = true) const;    // <-- new
-    double skewness(bool sample = true) const;               // <-- adjust later
-    double kurtosis(bool sample = true) const;               // <-- adjust later
+    double standardErrorOfMean(bool sample = true) const; 
+    double skewness(bool sample = true) const;             
+    double kurtosis(bool sample = true) const;             
     double kurtosisExcess(bool sample = true) const;
     double coefficientVariation(bool sample = true) const;
     double relativeStandardDeviation(bool sample = true) const;
-    //DynamicArray<pair<double, int>> frequencyTable()const;
+    unordered_map<int, int> getFrequencies();
+
 };
 
 
