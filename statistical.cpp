@@ -1,3 +1,4 @@
+
 #include "Statistical.h"
 #include "DynamicArray.h"
 
@@ -205,6 +206,10 @@ double Statistical::rootMeanSquare() {
 
 double Statistical::minimum()
 {
+
+    if (dataset.size() == 0) {
+        throw std::exception("\n\tEXCEPTION ERROR: Dataset must contain more values. \n");
+    }
     double minVal = dataset.retrieve(0);
     return minVal;
 }
@@ -391,7 +396,7 @@ double Statistical::relativeStandardDeviation(bool sample) const {
 
 unordered_map<int, int> Statistical::getFrequency() {
     unordered_map<int, int> freq;
-    for (int i = 0; i < dataset.size();i++) {
+    for (int i = 0; i < dataset.size(); i++) {
         freq[dataset.retrieve(i)]++;
     }
     return freq;
