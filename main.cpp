@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <iomanip>
 #include <cstdlib>
@@ -40,7 +41,7 @@ void TaskU();
 void TaskV();
 void TaskW();
 void TaskX();
-void TaskY(); 
+void TaskY();
 void TaskZ();
 int main()
 {
@@ -78,15 +79,15 @@ int main()
 		case 'O': TaskO(); break;
 		case 'P': TaskP(); break;
 		case 'Q': TaskQ(); break;
-			 case 'R': TaskR(); break;
-			 case 'S': TaskS(); break;
-			 case 'T': TaskT(); break;
-			 case 'U': TaskU(); break;
-			 case 'V': TaskV(); break;
-			 case 'W': TaskW(); break;
-			 case 'X': TaskX(); break;
-			 case 'Y': TaskY(); break;
-			 case 'Z': TaskZ(); break;
+		case 'R': TaskR(); break;
+		case 'S': TaskS(); break;
+		case 'T': TaskT(); break;
+		case 'U': TaskU(); break;
+		case 'V': TaskV(); break;
+		case 'W': TaskW(); break;
+		case 'X': TaskX(); break;
+		case 'Y': TaskY(); break;
+		case 'Z': TaskZ(); break;
 		default: cout << "\t\tERROR - Invalid option. Please re-enter."; break;
 		}
 		cout << "\n";
@@ -262,11 +263,11 @@ void OptionThree()
 	cout << "\n\t ============================================================";
 	cout << "\n\tR. Return";
 	cout << "\n\t ============================================================";
-	choice = inputChar("\tOption:","ABCR");
+	choice = inputChar("\tOption:", "ABCR");
 
 	switch (choice) {
 	case 'A':
-		
+
 		f_value = inputInteger("\n\tSpecify an integer value to find and be deleted from the Dataset:", true);
 
 		i_choice = inputChar("Delete *-all elements or 1-one element found with value 1?", "1*");
@@ -276,12 +277,12 @@ void OptionThree()
 		dataset.erase(f_value, oneOrAll);
 		break;
 	case 'B':
-		
 
-		starting_index = inputInteger("\n\tSpecify a starting integer value to be deleted from the dataset: ", 0, dataset.size()-1);
-		ending_index = inputInteger("\n\tSpecify an ending integer value to be deleted from the Dataset: ", 0, dataset.size()-1);
+
+		starting_index = inputInteger("\n\tSpecify a starting integer value to be deleted from the dataset: ", 0, dataset.size() - 1);
+		ending_index = inputInteger("\n\tSpecify an ending integer value to be deleted from the Dataset: ", 0, dataset.size() - 1);
 		cout << "\n";
-		for (int i = starting_index; i <= ending_index;i++)
+		for (int i = starting_index; i <= ending_index; i++)
 			dataset.remove(i);
 
 		cout << "CONFIRMATION: ELEMENT(s): " << ((ending_index - starting_index) + 1) << "have been deleted. " << endl;
@@ -291,7 +292,7 @@ void OptionThree()
 		break;
 	case 'C':
 
-		for (int i = 0; i < dataset.size();i++)
+		for (int i = 0; i < dataset.size(); i++)
 			dataset.remove(i);
 
 		cout << "\n\tDataset has been purged of all elements. " << endl;
@@ -451,36 +452,52 @@ void TaskI()
 
 }
 
-void TaskI()
-{
 
-	Statistical stats(dataset);
-	double stddev = stats.standardDeviation();
-	std::cout << "Sample standard deviation =  " << stddev;
-
-}
 
 void TaskJ()
 {
 	Statistical stats(dataset);
-	double vrnce = stats.variance();
-	std::cout << "Variance =  " << vrnce;
+
+	try
+	{
+		double vrnce = stats.variance();
+		cout << "Variance =  " << vrnce;
+	}
+	catch (const std::exception& e)
+	{
+		cerr << e.what();
+	}
 
 
 }
 void TaskK()
 {
 	Statistical stats(dataset);
-	double mdrnge = stats.midRange();
-	std::cout << "Midrange =  " << mdrnge;
 
+	try
+	{
+		double mdrnge = stats.midRange();
+		cout << "Midrange =  " << mdrnge;
+	}
+	catch (const std::exception& e)
+	{
+		cerr << e.what();
+	}
 
 }
 
 void TaskL()
 {
 	Statistical stats(dataset);
-	double iqr = stats.quartiles();
+
+	try
+	{
+		double iqr = stats.quartiles();
+	}
+	catch (const std::exception& e)
+	{
+		cerr << e.what();
+	}
 
 }
 
@@ -488,39 +505,82 @@ void TaskM()
 {
 	//needs to only reurn IQR
 	Statistical stats(dataset);
-	double iqr = stats.quartiles();
+
+	try
+	{
+		double iqr = stats.quartiles();
+	}
+	catch (const std::exception& e)
+	{
+		cerr << e.what();
+	}
 
 }
 
 void TaskN()
 {
 	Statistical stats(dataset);
-	double out = stats.outliers();
-	std::cout << "Outliers =  " << out;
+
+	try
+	{
+		double out = stats.outliers();
+		cout << "Outliers =  " << out;
+	}
+	catch (const std::exception& e)
+	{
+		cerr << e.what();
+	}
+
 
 }
 
 void TaskO()
 {
 	Statistical stats(dataset);
-	double sumsquares = stats.SumOfSquares();
-	std::cout << "Sum of Squares = " << sumsquares;
+
+	try
+	{
+		double sumsquares = stats.SumOfSquares();
+		cout << "Sum of Squares = " << sumsquares;
+	}
+	catch (const std::exception& e)
+	{
+		cerr << e.what();
+	}
 
 }
 
 void TaskP()
 {
 	Statistical stats(dataset);
-	double mnabsdeviation = stats.meanAbsoluteDeviation();
-	std::cout << "Mean Absolute Deviation = " << mnabsdeviation;
+
+	try
+	{
+		double mnabsdeviation = stats.meanAbsoluteDeviation();
+		cout << "Mean Absolute Deviation = " << mnabsdeviation;
+	}
+	catch (const std::exception& e)
+	{
+		cerr << e.what();
+	}
+
 
 }
 
 void TaskQ()
 {
 	Statistical stats(dataset);
-	double rtmeansquare = stats.rootMeanSquare();
-	std::cout << "Root Mean Square = " << rtmeansquare;
+
+	try
+	{
+		double rtmeansquare = stats.rootMeanSquare();
+		std::cout << "Root Mean Square = " << rtmeansquare;
+	}
+	catch (const std::exception& e)
+	{
+		cerr << e.what();
+	}
+
 
 }
 
@@ -604,7 +664,7 @@ void TaskY() {
 
 	const int labelWidth = 30;
 
-	cout << left; 
+	cout << left;
 	cout << setw(labelWidth) << "\tMinimum:" << stats.minimum() << endl;
 	cout << setw(labelWidth) << "\tMaximum:" << stats.maximum() << endl;
 	cout << setw(labelWidth) << "\tRange:" << stats.range() << endl;
@@ -660,7 +720,7 @@ void TaskZ() {
 		return;
 	}
 
-	const int labelWidth = 30;
+
 	outFile << left;
 
 	// Anthony's Portion
