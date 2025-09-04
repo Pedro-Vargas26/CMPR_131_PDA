@@ -1,0 +1,79 @@
+#include <iostream>
+#include "Quadratic.h"
+#include "input.h"
+
+using namespace std;
+Quadratic q;
+
+int main()
+{
+  
+    int val, root1, root2;
+    char option;
+
+    while (true) {
+        system("cls");
+        cout << "\n1> Quadratic Menu\n";
+        cout << "=====================================================\n";
+        cout << "    D. display the expression\n";
+        cout << "    A. set coefficient (a)\n";
+        cout << "    B. set coefficient (b)\n";
+        cout << "    C. set coefficient (c)\n";
+        cout << "    E. get evaluation (x)\n";
+        cout << "    N. get the number of real roots\n";
+        cout << "    R. get real root(s)\n";
+        cout << "-------------------------------------------------------\n";
+        cout << "    0. return\n";
+        cout << "========================================================\n";
+        char option = toupper(inputChar("Enter a choice ", "ABCDENR"));
+
+        switch (option)
+        {
+        case 'A':
+            val = inputInteger("Enter a ");
+            q.setA(val);
+            break;
+        case 'B':
+            val = inputInteger("Enter b ");       
+            q.setB(val);
+            break;
+        case 'C':
+            val = inputInteger("Enter c ");
+            q.setC(val);
+            break;
+        case 'D':
+            q.display();
+            break;
+        case 'E':
+            val = inputInteger("Enter x ");
+            cout << " Evaluation result: " << q.evaluate(val) << endl;
+            system("pause");
+            break;
+        case 'N':
+            cout << "Number of real roots: " << q.numberOfRealRoots() << endl;
+            system("pause");
+            break;
+        case 'R':
+            if (q.numberOfRealRoots() > 0) {
+                q.realRoots(root1, root2);
+                if (root1 == root2)
+                    cout << "One real root: x = " << root1 << endl;
+                else
+                    cout << "Two real roots: x1 = " << root1 << ", x2 = " << root2 << endl;
+            } 
+            else {
+                cout << "No real roots.\n";
+            }
+            system("pause");
+            break;
+        case '0':
+            cout << "Return tp main menu\n";
+            break;
+        default:
+            system("pause");
+            cout << "Invalid choice.\n";
+        }
+
+    }
+
+}
