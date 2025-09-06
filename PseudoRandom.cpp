@@ -23,7 +23,7 @@ double PseudoRandom::getIndirectNext() {
 	return static_cast<double>(seed) / static_cast<double>(modulo);
 }
 
-unordered_map<int, double> PseudoRandom::uniformDistribution(int revs, int intervals = 10) {
+unordered_map<int, double> PseudoRandom::uniformDistribution(int revs, int intervals) {
 
 	unordered_map<int, double> distribution;
 
