@@ -1,79 +1,174 @@
 #include <iostream>
-#include "Quadratic.h"
+#include <string>
+#include <iomanip>
 #include "input.h"
+#include "Rational.h"
+
 
 using namespace std;
-Quadratic q;
+
+void RationalMenu();
+
+void EnterR1(Rational& r1);
+void EnterR2(Rational& r2);
+char menuOption();
+
 
 int main()
 {
-  
-    int val, root1, root2;
-    char option;
-
-    while (true) {
-        system("cls");
-        cout << "\n1> Quadratic Menu\n";
-        cout << "=====================================================\n";
-        cout << "    D. display the expression\n";
-        cout << "    A. set coefficient (a)\n";
-        cout << "    B. set coefficient (b)\n";
-        cout << "    C. set coefficient (c)\n";
-        cout << "    E. get evaluation (x)\n";
-        cout << "    N. get the number of real roots\n";
-        cout << "    R. get real root(s)\n";
-        cout << "-------------------------------------------------------\n";
-        cout << "    0. return\n";
-        cout << "========================================================\n";
-        char option = toupper(inputChar("Enter a choice ", "ABCDENR"));
-
-        switch (option)
+    do
+    {
+        switch (menuOption())
         {
-        case 'A':
-            val = inputInteger("Enter a ");
-            q.setA(val);
+        case 'X': exit(0); break;
+      //  case '1': OptionOne(); break;
+        //case '2': OptionTwo(); break;
+        case '3': RationalMenu(); break;
+
+        default: cout << "\t\tERROR - Invalid option. Please re-enter."; break;
+        }
+        cout << "\n";
+        system("pause");
+    } while (true);
+    return EXIT_SUCCESS;
+ 
+}
+
+char menuOption()
+{
+    system("cls");
+    cout << "\n\tCMPR131 Chapter2 - ADT Assignments by Anthony Herrera (9/4/2025)";
+    cout << "\n\t" << string(105, char(205));
+    cout << "\n\t1> Quadratic Expression";
+    cout << "\n\t2> Pseudorandom";
+    cout << "\n\t3> Rational number";
+    cout << "\n\t" << string(105, char(196));
+    cout << "\n\tX.Exit";
+    cout << "\n\t" << string(105, char(205));
+
+    return toupper(inputChar("\n\tOption: "));
+
+}
+
+void EnterR1(Rational& r1)
+{
+    r1.setNumerator(inputInteger("\n\tEnter numerator for r1: "));
+
+    while(true)
+    {
+        try
+        {
+            r1.setDenominator(inputInteger("\n\tEnter Denominator for r1: "));
             break;
-        case 'B':
-            val = inputInteger("Enter b ");       
-            q.setB(val);
+        }
+        catch (const Rational::divisionByZero& e)
+        {
+            cerr << e.what();
+        }
+    }
+
+    r1.normalize();
+
+}
+
+void EnterR2(Rational& r2)
+{
+    r2.setNumerator(inputInteger("\n\tEnter numerator for r2: "));
+    while (true)
+    {
+        try
+        {
+            r2.setDenominator(inputInteger("\n\tEnter Denominator for r2: "));
             break;
-        case 'C':
-            val = inputInteger("Enter c ");
-            q.setC(val);
-            break;
-        case 'D':
-            q.display();
-            break;
-        case 'E':
-            val = inputInteger("Enter x ");
-            cout << " Evaluation result: " << q.evaluate(val) << endl;
-            system("pause");
-            break;
-        case 'N':
-            cout << "Number of real roots: " << q.numberOfRealRoots() << endl;
-            system("pause");
-            break;
-        case 'R':
-            if (q.numberOfRealRoots() > 0) {
-                q.realRoots(root1, root2);
-                if (root1 == root2)
-                    cout << "One real root: x = " << root1 << endl;
-                else
-                    cout << "Two real roots: x1 = " << root1 << ", x2 = " << root2 << endl;
-            } 
-            else {
-                cout << "No real roots.\n";
-            }
-            system("pause");
-            break;
-        case '0':
-            cout << "Return tp main menu\n";
-            break;
-        default:
-            system("pause");
-            cout << "Invalid choice.\n";
+        }
+        catch (const Rational::divisionByZero& e)
+        {
+            cerr << e.what();
+        }
+    }
+
+    r2.normalize();
+
+}
+
+
+void RationalMenu()
+{
+    Rational r1, r2;
+
+    while(true)
+    {
+        system("cls");
+        cout << "\n\t3> Rational Number menu";
+        cout << "\n\t" << string(105, char(205));
+        cout << "\n\tA.enter values of rational number R1"
+            << "\n\tB.display R1"
+            << "\n\tC.enter values for  rational number R2"
+            << "\n\tD.display R2"
+            << "\n\tE.multiplication of 2 rational numbers(R1 * R2)"
+            << "\n\tF.division of 2 rational numbers(R1 / R2)"
+            << "\n\tG.addition of 2 rational numbers(R1 + R2)"
+            << "\n\tH.subtraction 2 rational numbers(R1 - R2)"
+            << "\n\tI. (R1 == R2)"
+            << "\n\tJ. (R1 < R2)";
+        cout << "\n\t" << string(105, char(196));
+        cout << "\n\tR. Return";
+        cout << "\n\t" << string(105, char(205));
+
+        char optionR = inputChar("\n\tOption: ", "ABCDWFGHIJR");
+
+        switch (optionR)
+        {
+        case 'r':
+                return;
+        case'a': EnterR1(r1); break;
+
+        case 'b': 
+        {
+            cout << "\n\tRational number R1: " << r1; break;
         }
 
+        case 'c': EnterR2(r2); break;
+        case 'd': 
+        {
+            cout << "\n\tRational number R2: " << r2; break;
+        }
+        
+
+        case 'e':
+        {
+            cout << "\n\tR1 * R2: " << (r1 * r2); break;
+        }
+
+        case 'f':
+        {
+            cout << "\n\tR1 / R2: " << (r1 / r2); break;
+        }
+
+        case 'g':
+        {
+            cout << "\n\tR1 + R2: " << (r1 + r2); break;
+        }
+
+        case 'h':
+        {
+            cout << "\n\tR1 - R2: " << (r1 - r2); break;
+        }
+
+        case 'i': 
+        {
+            cout << "\n\tR1 == R2: " << (r1 == r2 ? "true" : "false") << endl; break;
+        }
+
+        case 'j':
+        {
+            cout << "\n\tR1 < R2: " << (r1 < r2 ? "true" : "false") << endl; break;
+        }
+
+        }
+
+        cout << "\n\n";
+        system("pause");
     }
 
 }
