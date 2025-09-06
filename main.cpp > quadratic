@@ -2,10 +2,14 @@
 #include <string>
 #include <iomanip>
 #include "input.h"
+#include "Quadratic.h"
+#include "PseudoRandom.h"
 #include "Rational.h"
 
 
 using namespace std;
+using std::cout;
+
 
 void RationalMenu();
 
@@ -14,6 +18,10 @@ void EnterR2(Rational& r2);
 char menuOption();
 
 
+
+void quadraticMenu();
+void pseudoRandomMenu();
+
 int main()
 {
     do
@@ -21,8 +29,8 @@ int main()
         switch (menuOption())
         {
         case 'X': exit(0); break;
-      //  case '1': OptionOne(); break;
-        //case '2': OptionTwo(); break;
+        case '1': quadraticMenu(); break;
+        case '2': pseudoRandomMenu(); break;
         case '3': RationalMenu(); break;
 
         default: cout << "\t\tERROR - Invalid option. Please re-enter."; break;
@@ -31,13 +39,13 @@ int main()
         system("pause");
     } while (true);
     return EXIT_SUCCESS;
- 
+
 }
 
 char menuOption()
 {
     system("cls");
-    cout << "\n\tCMPR131 Chapter2 - ADT Assignments by Anthony Herrera (9/4/2025)";
+    cout << "\n\tCMPR131 Chapter2 - ADT Assignments by Pedro Vargas (9/6/2025)";
     cout << "\n\t" << string(105, char(205));
     cout << "\n\t1> Quadratic Expression";
     cout << "\n\t2> Pseudorandom";
@@ -54,7 +62,7 @@ void EnterR1(Rational& r1)
 {
     r1.setNumerator(inputInteger("\n\tEnter numerator for r1: "));
 
-    while(true)
+    while (true)
     {
         try
         {
@@ -96,7 +104,7 @@ void RationalMenu()
 {
     Rational r1, r2;
 
-    while(true)
+    while (true)
     {
         system("cls");
         cout << "\n\t3> Rational Number menu";
@@ -120,20 +128,20 @@ void RationalMenu()
         switch (optionR)
         {
         case 'r':
-                return;
+            return;
         case'a': EnterR1(r1); break;
 
-        case 'b': 
+        case 'b':
         {
             cout << "\n\tRational number R1: " << r1; break;
         }
 
         case 'c': EnterR2(r2); break;
-        case 'd': 
+        case 'd':
         {
             cout << "\n\tRational number R2: " << r2; break;
         }
-        
+
 
         case 'e':
         {
@@ -155,7 +163,7 @@ void RationalMenu()
             cout << "\n\tR1 - R2: " << (r1 - r2); break;
         }
 
-        case 'i': 
+        case 'i':
         {
             cout << "\n\tR1 == R2: " << (r1 == r2 ? "true" : "false") << endl; break;
         }
@@ -171,4 +179,152 @@ void RationalMenu()
         system("pause");
     }
 
+}
+
+void quadraticMenu() {
+    Quadratic q;
+    int val, root1, root2;
+    char option;
+
+    while (true) {
+        system("cls");
+        cout << "\n1> Quadratic Menu\n";
+        cout << "=====================================================\n";
+        cout << "    D. display the expression\n";
+        cout << "    A. set coefficient (a)\n";
+        cout << "    B. set coefficient (b)\n";
+        cout << "    C. set coefficient (c)\n";
+        cout << "    E. get evaluation (x)\n";
+        cout << "    N. get the number of real roots\n";
+        cout << "    R. get real root(s)\n";
+        cout << "-------------------------------------------------------\n";
+        cout << "    0. return\n";
+        cout << "========================================================\n";
+        char option = toupper(inputChar("Enter a choice ", "ABCDENR"));
+
+        switch (option)
+        {
+        case 'A':
+            val = inputInteger("Enter a ");
+            q.setA(val);
+            break;
+        case 'B':
+            val = inputInteger("Enter b ");
+            q.setB(val);
+            break;
+        case 'C':
+            val = inputInteger("Enter c ");
+            q.setC(val);
+            break;
+        case 'D':
+            q.display();
+            break;
+        case 'E':
+            val = inputInteger("Enter x ");
+            cout << " Evaluation result: " << q.evaluate(val) << endl;
+            system("pause");
+            break;
+        case 'N':
+            cout << "Number of real roots: " << q.numberOfRealRoots() << endl;
+            system("pause");
+            break;
+        case 'R':
+            if (q.numberOfRealRoots() > 0) {
+                q.realRoots(root1, root2);
+                if (root1 == root2)
+                    cout << "One real root: x = " << root1 << endl;
+                else
+                    cout << "Two real roots: x1 = " << root1 << ", x2 = " << root2 << endl;
+            }
+            else {
+                cout << "No real roots.\n";
+            }
+            system("pause");
+            break;
+        case '0':
+            cout << "Return to main menu\n";
+            break;
+        default:
+            system("pause");
+            cout << "Invalid choice.\n";
+        }
+    }
+}
+
+
+void pseudoRandomMenu() {
+    const char INDENT = '\t';
+    char choice = 'A';
+    unordered_map<int, double> standard_dis;
+    PseudoRandom pr;
+    do {
+        system("cls");
+        cout << INDENT << "2 > Pseudorandom menu\n";
+        cout << INDENT << string(80, char(205)) << endl;
+        cout << INDENT << "A.get seed\n";
+        cout << INDENT << "B.set seed\n";
+        cout << INDENT << "C.get multiplier\n";
+        cout << INDENT << "D.set multiplier\n";
+        cout << INDENT << "E.get modulus\n";
+        cout << INDENT << "F.set modulus\n";
+        cout << INDENT << "G.get increment\n";
+        cout << INDENT << "H.set increment\n";
+        cout << INDENT << "I.get next number\n";
+        cout << INDENT << "J.get indirect next number\n";
+        cout << INDENT << "K.run experiment with different values(mutliplier, increment, and modulus)\n";
+        cout << INDENT << string(80, (char)196) << endl;
+        cout << INDENT << "0. return\n";
+        cout << INDENT << string(80, char(205)) << endl;
+        choice = inputChar("\tOption :", "ABCDEFGHIJK0");
+        choice = toupper(choice);
+        switch (choice) {
+        case 'A':
+            cout << "\n" << INDENT << "Seed:\t" << pr.getSeed();
+            break;
+        case 'B':
+            pr.setSeed(inputInteger("\n\tEnter seed:\t", true));
+            break;
+        case 'C':
+            cout << "\n" << INDENT << "Multiplier:\t" << pr.getMultiplier();
+            break;
+        case 'D':
+            pr.setMultiplier(inputInteger("\n\tEnter Multiplier:\t", true));
+            break;
+        case 'E':
+            cout << "\n" << INDENT << "Modulo:\t" << pr.getModulo();
+            break;
+        case 'F':
+            pr.setModulo(inputInteger("\n\tEnter Modulo:\t", true));
+            break;
+        case 'G':
+            cout << "\n" << INDENT << "Increment:\t" << pr.getIncrement();
+            break;
+        case 'H':
+            pr.setIncrement(inputInteger("\n\tEnter Increment:\t", true));
+            break;
+        case 'I':
+            cout << "\n" << INDENT << "Next number:\t" << pr.getInt();
+            break;
+        case 'J':
+            cout << "\n" << INDENT << "Indirect Next Number:\t" << pr.getIndirectNext();
+            break;
+        case 'K':
+            standard_dis = pr.uniformDistribution(10000,10);
+
+            cout << "\n\n" << INDENT << "Multipler: " << pr.getMultiplier() << endl;
+            cout << INDENT << "Modulo: " << pr.getModulo() << endl;
+            cout << INDENT << "Increment: " << pr.getIncrement() << endl;
+            cout << "\n";
+            for (int i = 0; i < 10;i++)
+                cout << INDENT << "(" << ((double)i/10.0) << "..." << ((double)((i + 1)/10.0)) << "):\t" << setw(10) << standard_dis[i] << "%" << endl;
+
+            cout << "\n\n" << INDENT << "With 10 uniformly distributed rand number in the range[0...1.0), ";
+            cout << "\n" << INDENT << "the approximate Gaussian distribution " << pr.gaussianApproximation(50000,1.0,10)<< "\n\n";
+            break;
+        default:
+            return;
+        }
+        cout << "\n\n\t";
+        system("pause");
+    } while (true);
 }
