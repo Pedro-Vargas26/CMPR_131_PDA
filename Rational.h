@@ -215,43 +215,61 @@ public:
 		return *this;
 	}
 
-	// Addition
-	Rational operator+(const Rational& other) const {
-		Rational result;
-		result.numerator = this->numerator * other.denominator + other.numerator * this->denominator;
-		result.denominator = this->denominator * other.denominator;
-		result.normalize();
-		return result;
+	// Precondition: r1 and r2 are defined
+	// Postcondition: Addition of r1 and r2, ensuring they stay in int form
+	Rational operatorAdd(const Rational& other) const 
+	{
+		int num = static_cast<int>(numerator) * other.denominator
+			+ static_cast<int>(other.numerator) * denominator;
+		int den = static_cast<int>(denominator) * other.denominator;
+		Rational r;
+		r.setNumerator(static_cast<short>(num));
+		r.setDenominator(static_cast<short>(den));
+		r.normalize();
+		return r;
 	}
 
-	// Subtraction
-	Rational operator-(const Rational& other) const {
-		Rational result;
-		result.numerator = this->numerator * other.denominator - other.numerator * this->denominator;
-		result.denominator = this->denominator * other.denominator;
-		result.normalize();
-		return result;
+	// Precondition: r1 and r2 are defined
+	// Postcondition: Subtraction of r1 and r2, ensuring they stay in int form
+	Rational operatorSub(const Rational& other) const
+	{
+		int num = static_cast<int>(numerator) * other.denominator
+			- static_cast<int>(other.numerator) * denominator;
+		int den = static_cast<int>(denominator) * other.denominator;
+		Rational r;
+		r.setNumerator(static_cast<short>(num));
+		r.setDenominator(static_cast<short>(den));
+		r.normalize();
+		return r;
 	}
 
-	// Multiplication
-	Rational operator*(const Rational& other) const {
-		Rational result;
-		result.numerator = this->numerator * other.numerator;
-		result.denominator = this->denominator * other.denominator;
-		result.normalize();
-		return result;
+	// Precondition: r1 and r2 are defined
+	// Postcondition: Multiplication of r1 and r2, ensuring they stay in int form
+	Rational operatorMult(const Rational& other) const
+	{
+		int num = static_cast<int>(numerator) * other.numerator;
+		int den = static_cast<int>(denominator) * other.denominator;
+		Rational r;
+		r.setNumerator(static_cast<short>(num));
+		r.setDenominator(static_cast<short>(den));
+		r.normalize();
+		return r;
 	}
 
-	// Division
-	Rational operator/(const Rational& other) const {
+	// Precondition: r1 and r2 are defined
+	// Postcondition: Division of r1 and r2, ensuring they stay in int form
+	Rational operatorDiv(const Rational& other) const 
+	{
 		if (other.numerator == 0) {
-			throw divisionByZero("\tERROR: Division by zero Rational attempted.");
+			throw divisionByZero("ERROR: Division by zero Rational attempted.");
 		}
-		Rational result; 
-		result.numerator = this->numerator * other.denominator;
-		result.denominator = this->denominator * other.numerator;
-		result.normalize(); 
-		return result;
+		int num = static_cast<int>(numerator) * other.denominator;
+		int den = static_cast<int>(denominator) * other.numerator;
+		Rational r;
+		r.setNumerator(static_cast<short>(num));
+		r.setDenominator(static_cast<short>(den));
+		r.normalize();
+		return r;
 	}
 
 	/*
