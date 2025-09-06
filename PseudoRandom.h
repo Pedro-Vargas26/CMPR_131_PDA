@@ -24,31 +24,31 @@ public:
     /*-------------------------------------------------------------------------*/
     // precondition: nMultiplier should be > 0
     // postcondition: multiplier is updated, returns true
-    bool setMultiplier(int);
+    bool setMultiplier(int) noexcept;
     /*-------------------------------------------------------------------------*/
     // precondition: none
     // postcondition: returns the current multiplier
-    int getMultiplier() const;
+    int getMultiplier() const noexcept;
     /*-------------------------------------------------------------------------*/
     // precondition: modulo should be > 0
     // postcondition: modulo is updated, returns true
-    bool setModulo(int modulo);
+    bool setModulo(int modulo) noexcept;
     /*-------------------------------------------------------------------------*/
     // precondition: none
     // postcondition: returns the current modulo
-    int getModulo() const;
+    int getModulo() const noexcept;
     /*-------------------------------------------------------------------------*/
     // precondition: nSeed should be >= 0
     // postcondition: seed is updated, returns true
-    bool setSeed(int);
+    bool setSeed(int) noexcept;
     /*-------------------------------------------------------------------------*/
     // precondition: none
     // postcondition: returns the current seed
-    int getSeed() const;
+    int getSeed() const noexcept;
     /*-------------------------------------------------------------------------*/
     // precondition: revs > 0, intervals > 0
     // postcondition: returns a map of interval -> percentage distribution
-    unordered_map<int, double> uniformDistribution(int revs, int intervals = 10);
+    unordered_map<int, double> uniformDistribution(int, int);
     /*-------------------------------------------------------------------------*/
     // precondition: distributions > 0, standardDev >= 0
     // postcondition: returns an approximate Gaussian-distributed random number
