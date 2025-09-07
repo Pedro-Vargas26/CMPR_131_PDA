@@ -76,7 +76,7 @@ public:
 
 
 	Rational() {
-		numerator = 1;
+		numerator = 0;
 		denominator = 1;
 	}
 	//copy constructor
@@ -217,7 +217,7 @@ public:
 
 	// Precondition: r1 and r2 are defined
 	// Postcondition: Addition of r1 and r2, ensuring they stay in int form
-	Rational operatorAdd(const Rational& other) const 
+	Rational operator+(const Rational& other) const 
 	{
 		int num = static_cast<int>(numerator) * other.denominator
 			+ static_cast<int>(other.numerator) * denominator;
@@ -228,10 +228,9 @@ public:
 		r.normalize();
 		return r;
 	}
-
 	// Precondition: r1 and r2 are defined
 	// Postcondition: Subtraction of r1 and r2, ensuring they stay in int form
-	Rational operatorSub(const Rational& other) const
+	Rational operator-(const Rational& other) const 
 	{
 		int num = static_cast<int>(numerator) * other.denominator
 			- static_cast<int>(other.numerator) * denominator;
@@ -245,7 +244,7 @@ public:
 
 	// Precondition: r1 and r2 are defined
 	// Postcondition: Multiplication of r1 and r2, ensuring they stay in int form
-	Rational operatorMult(const Rational& other) const
+	Rational operator*(const Rational& other) const 
 	{
 		int num = static_cast<int>(numerator) * other.numerator;
 		int den = static_cast<int>(denominator) * other.denominator;
@@ -255,10 +254,9 @@ public:
 		r.normalize();
 		return r;
 	}
-
 	// Precondition: r1 and r2 are defined
 	// Postcondition: Division of r1 and r2, ensuring they stay in int form
-	Rational operatorDiv(const Rational& other) const 
+	Rational operator/(const Rational& other) const 
 	{
 		if (other.numerator == 0) {
 			throw divisionByZero("ERROR: Division by zero Rational attempted.");
@@ -271,7 +269,6 @@ public:
 		r.normalize();
 		return r;
 	}
-
 	/*
 	@param const Rational& - other instance to compare if not equal.
 	@return bool - true if they're equal. */
