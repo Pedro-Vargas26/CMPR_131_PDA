@@ -54,9 +54,13 @@ public:
     // postcondition: returns an approximate Gaussian-distributed random number
     //@brief returns an exception if incorrect values are entered. Otherwise it proceeds as per usual. 
     double gaussianApproximation(double median, double standardDev, int distributions);
+
+    bool getIncrement() const noexcept;
+    bool setIncrement(int) const noexcept;
+
 private:
-    int seed;
-    int modulo;
+    int seed; 
+    int modulo;  
     int multiplier;
     int increment;
     /*-------------------------------------------------------------------------*/
