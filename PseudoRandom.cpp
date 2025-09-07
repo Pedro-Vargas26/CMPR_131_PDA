@@ -14,7 +14,7 @@ PseudoRandom::PseudoRandom(int nModulo, int nMultiplier, int nIncrement) {
 	increment = nIncrement;
 }
 
-int PseudoRandom::getInt(){
+int PseudoRandom::getInt() {
 	return intLinearCongruence();
 }
 
@@ -27,11 +27,11 @@ unordered_map<int, double> PseudoRandom::uniformDistribution(int revs, int inter
 
 	unordered_map<int, double> distribution;
 
-	for (int i = 0; i < revs;i++) {
-		distribution[(int)(getIndirectNext()*intervals)]++;
+	for (int i = 0; i < revs; i++) {
+		distribution[(int)(getIndirectNext() * intervals)]++;
 	}
-	
-	for (int i = 0; i < intervals;i++) {
+
+	for (int i = 0; i < intervals; i++) {
 		distribution[i] /= revs;
 		distribution[i] *= 100.0;
 	}
@@ -40,14 +40,24 @@ unordered_map<int, double> PseudoRandom::uniformDistribution(int revs, int inter
 
 }
 
-double PseudoRandom::gaussianApproximation(double median, double sd,int distributions) {
+double PseudoRandom::gaussianApproximation(double median, double sd, int distributions) {
 	if (median < 0 || sd < 0 || distributions < 0) throw std::exception("ERROR: INVALID CALCULATION VALUE. ");
 	double sum = 0.0;
-	for (int i = 0; i < distributions;i++)
+	for (int i = 0; i < distributions; i++)
 		sum += getIndirectNext();
 
 	double expected_summation = sum - (median * .5);
 	return median + expected_summation * sd;
+}
+
+bool PseudoRandom::getIncrement() const noexcept
+{
+	return false;
+}
+
+bool PseudoRandom::setIncrement(int) const noexcept
+{
+	return false;
 }
 
 
@@ -57,7 +67,7 @@ bool PseudoRandom::setMultiplier(int nMultiplier) noexcept {
 	multiplier = nMultiplier;
 	return true;
 }
-int PseudoRandom::getMultiplier() const noexcept{
+int PseudoRandom::getMultiplier() const noexcept {
 	return multiplier;
 }
 bool PseudoRandom::setModulo(int nmodulo) noexcept {
@@ -66,7 +76,7 @@ bool PseudoRandom::setModulo(int nmodulo) noexcept {
 	modulo = nmodulo;
 	return true;
 }
-int PseudoRandom::getModulo()const noexcept{
+int PseudoRandom::getModulo()const noexcept {
 	return modulo;
 }
 bool PseudoRandom::setSeed(int nSeed) noexcept {
@@ -75,7 +85,7 @@ bool PseudoRandom::setSeed(int nSeed) noexcept {
 	seed = nSeed;
 	return true;
 }
-int PseudoRandom::getSeed()const noexcept{
+int PseudoRandom::getSeed()const noexcept {
 	return seed;
 }
 
