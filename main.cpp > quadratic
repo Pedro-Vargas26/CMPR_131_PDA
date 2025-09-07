@@ -1,3 +1,14 @@
+
+/*
+
+
+Chapter 2 assignments, done in collaboration with
+Daisy Ramon, Anthony Herrera, and Pedro Vargas. 
+
+
+*/
+
+
 #include <iostream>
 #include <string>
 #include <iomanip>
@@ -246,7 +257,7 @@ void quadraticMenu() {
             break;
         case '0':
             cout << "\n\tReturn to main menu\n";
-                return;
+            return;
         default:
             cout << "\n\tInvalid choice.\n";
             system("pause");
@@ -280,9 +291,9 @@ void pseudoRandomMenu() {
         cout << INDENT << "J.get indirect next number\n";
         cout << INDENT << "K.run experiment with different values(mutliplier, increment, and modulus)\n";
         cout << INDENT << string(80, (char)196) << endl;
-        cout << INDENT << "0. return\n";
+        cout << INDENT << "R. return\n";
         cout << INDENT << string(80, char(205)) << endl;
-        choice = inputChar("\tOption :", "ABCDEFGHIJK0");
+        choice = inputChar("\tOption :", "ABCDEFGHIJKR");
         choice = toupper(choice);
         switch (choice) {
         case 'A':
@@ -316,7 +327,7 @@ void pseudoRandomMenu() {
             cout << "\n" << INDENT << "Indirect Next Number:\t" << pr.getIndirectNext();
             break;
         case 'K':
-            standard_dis = pr.uniformDistribution(revolutions,(int)intervals);
+            standard_dis = pr.uniformDistribution(revolutions, (int)intervals);
 
             cout << "\n\n" << INDENT << "Multipler: " << pr.getMultiplier() << endl;
             cout << INDENT << "Modulo: " << pr.getModulo() << endl;
@@ -326,7 +337,7 @@ void pseudoRandomMenu() {
                 cout << INDENT << "(" << ((double)i / intervals) << "..." << ((double)((i + 1) / intervals)) << "):\t" << setw(10) << standard_dis[i] << "%" << endl;
 
             cout << "\n\n" << INDENT << "With 10 uniformly distributed rand number in the range[0...1.0), ";
-            cout << "\n" << INDENT << "the approximate Gaussian distribution " << pr.gaussianApproximation(revolutions*.5,(intervals/100.0),(int)intervals)<< "\n\n";
+            cout << "\n" << INDENT << "the approximate Gaussian distribution " << pr.gaussianApproximation(revolutions * .5, (intervals / 100.0), (int)intervals) << "\n\n";
             break;
         default:
             return;
