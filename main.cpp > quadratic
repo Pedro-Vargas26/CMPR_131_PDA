@@ -1,14 +1,4 @@
 
-/*
-
-
-Chapter 2 assignments, done in collaboration with
-Daisy Ramon, Anthony Herrera, and Pedro Vargas. 
-
-
-*/
-
-
 #include <iostream>
 #include <string>
 #include <iomanip>
@@ -291,11 +281,14 @@ void pseudoRandomMenu() {
         cout << INDENT << "J.get indirect next number\n";
         cout << INDENT << "K.run experiment with different values(mutliplier, increment, and modulus)\n";
         cout << INDENT << string(80, (char)196) << endl;
-        cout << INDENT << "R. return\n";
+        cout << INDENT << "0. return\n";
         cout << INDENT << string(80, char(205)) << endl;
-        choice = inputChar("\tOption :", "ABCDEFGHIJKR");
+        choice = inputChar("\tOption :", "ABCDEFGHIJK0");
         choice = toupper(choice);
         switch (choice) {
+        case '0':
+            cout << "\n\tReturn to main menu\n";
+
         case 'A':
             cout << "\n" << INDENT << "Seed:\t" << pr.getSeed();
             break;
@@ -333,14 +326,15 @@ void pseudoRandomMenu() {
             cout << INDENT << "Modulo: " << pr.getModulo() << endl;
             cout << INDENT << "Increment: " << pr.getIncrement() << endl;
             cout << "\n";
-            for (int i = 0; i < (int)intervals;i++)
+            for (int i = 0; i < (int)intervals; i++)
                 cout << INDENT << "(" << ((double)i / intervals) << "..." << ((double)((i + 1) / intervals)) << "):\t" << setw(10) << standard_dis[i] << "%" << endl;
 
             cout << "\n\n" << INDENT << "With 10 uniformly distributed rand number in the range[0...1.0), ";
             cout << "\n" << INDENT << "the approximate Gaussian distribution " << pr.gaussianApproximation(revolutions * .5, (intervals / 100.0), (int)intervals) << "\n\n";
             break;
         default:
-            return;
+            cout << "\n\tInvalid choice.\n";
+            system("pause");
         }
         cout << "\n\n\t";
         system("pause");
